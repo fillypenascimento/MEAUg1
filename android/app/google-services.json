@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "993115799049",
+    "project_id": "meaug1",
+    "storage_bucket": "meaug1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993115799049:android:f8204f34792b98e99482d8",
+        "android_client_info": {
+          "package_name": "com.meaug1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993115799049-0f0emtsjtmtaqrd0huieuo01fd4qja6v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYXGKgtYnstLy31qSWesh6RanXRszysfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993115799049-0f0emtsjtmtaqrd0huieuo01fd4qja6v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
