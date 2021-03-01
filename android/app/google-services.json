@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "993115799049",
+    "firebase_url": "https://meaug1-default-rtdb.firebaseio.com",
     "project_id": "meaug1",
     "storage_bucket": "meaug1.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "993115799049-0f0emtsjtmtaqrd0huieuo01fd4qja6v.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "993115799049-vm3bnsa99r359ghbt0qv46a8rgjmf03r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.MEAUg1"
+              }
             }
           ]
         }

@@ -1,13 +1,19 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text } from 'react-native';
 
 import styles from './style';
+import LayoutDrawer from '../../components/LayoutDrawer/LayoutDrawer';
+import Container from '../../components/Container/Container';
 
-const Home = () => {
+const Home = (props) => {
+  const { navigation, route } = props;
+
   return (
-    <View>
-      <Text style={styles.text}>Testeee</Text>
-    </View>
+    <LayoutDrawer navigation={navigation} route={route}>
+      <Container>
+        <Text style={styles.text}>Home pos login</Text>
+      </Container>
+    </LayoutDrawer>
   );
 };
 

@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { connect } from 'react-redux';
 import auth from '@react-native-firebase/auth';
 
-import Home from './pages/Home/Home';
+import NotLoggedDrawerContent from './components/NotLoggedDrawerContent/NotLoggedDrawerContent';
+import LoggedDrawerContent from './components/LoggedDrawerContent/LoggedDrawerContent';
 
-const Stack = createStackNavigator();
+import Home from './pages/Home/Home';
+import Register from './pages/Register/Register';
+import Login from './pages/Login/Login';
+
+const Drawer = createDrawerNavigator();
+// const Stack = createStackNavigator();
 
 const noAnimation = {
   animation: 'timing',
@@ -16,52 +22,50 @@ const noAnimation = {
 };
 
 class Router extends Component {
+  state = {
+    logged: false,
+  };
+
+  componentDidMount() {
+    auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ logged: true });
+      } else {
+        this.setState({ logged: false });
+      }
+    });
+  }
+
   notLogedRoutes = () => {
     return (
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-        }}
+      <Drawer.Navigator
+        initialRouteName="Login"
+        drawerContent={(props) => <NotLoggedDrawerContent {...props} />}
       >
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Register" component={Home} />
-        <Stack.Screen name="Login" component={Home} />
-      </Stack.Navigator>
+        <Drawer.Screen name="Register" component={Register} />
+        <Drawer.Screen name="Login" component={Login} />
+      </Drawer.Navigator>
     );
   };
 
   logedRoutes = () => {
     return (
-      <Stack.Navigator
+      <Drawer.Navigator
         initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-        }}
+        drawerContent={(props) => <LoggedDrawerContent {...props} />}
       >
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            transitionSpec: {
-              open: noAnimation,
-              close: noAnimation,
-            },
-          }}
-        />
-      </Stack.Navigator>
+        <Drawer.Screen name="Home" component={Home} />
+      </Drawer.Navigator>
     );
   };
 
   render() {
-    // auth().onAuthStateChanged((user) => {
-    //   if (user) {
-    //     return <NavigationContainer>{this.logedRoutes()}</NavigationContainer>;
-    //   } else {
-    //     return <NavigationContainer>{this.notLogedRoutes()}</NavigationContainer>;
-    //   }
-    // });
-    return <NavigationContainer>{this.notLogedRoutes()}</NavigationContainer>;
+    const { logged } = this.state;
+    return (
+      <NavigationContainer>
+        {logged ? this.logedRoutes() : this.notLogedRoutes()}
+      </NavigationContainer>
+    );
   }
 }
 
