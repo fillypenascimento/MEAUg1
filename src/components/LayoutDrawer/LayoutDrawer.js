@@ -6,7 +6,7 @@ import styles from './style';
 const LayoutDrawer = (props) => {
   const { children, navigation, route } = props;
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View style={styles.line}>
         <TouchableHighlight
           style={styles.text}
@@ -18,7 +18,7 @@ const LayoutDrawer = (props) => {
         </TouchableHighlight>
         <Text style={styles.routeName}>Rota: {route.name}</Text>
       </View>
-      {children}
+      <View style={{ flex: 1 }}>{children}</View>
     </View>
   );
 };

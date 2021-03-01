@@ -11,7 +11,7 @@ const Home = (props) => {
   return (
     <LayoutDrawer navigation={navigation} route={route}>
       <Container>
-        <Text style={styles.text}>Home</Text>
+        <Text style={styles.text}>Home pos login</Text>
       </Container>
     </LayoutDrawer>
   );
