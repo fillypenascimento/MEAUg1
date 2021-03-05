@@ -4,12 +4,13 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { connect } from 'react-redux';
 import auth from '@react-native-firebase/auth';
 
-import NotLoggedDrawerContent from './components/NotLoggedDrawerContent/NotLoggedDrawerContent';
-import LoggedDrawerContent from './components/LoggedDrawerContent/LoggedDrawerContent';
+import NotLoggedDrawerContent from '../components/NotLoggedDrawerContent/NotLoggedDrawerContent';
+import LoggedDrawerContent from '../components/LoggedDrawerContent/LoggedDrawerContent';
 
-import Home from './pages/Home/Home';
-import Register from './pages/Register/Register';
-import Login from './pages/Login/Login';
+import Home from '../pages/Home/Home';
+import Register from '../pages/Register/Register';
+import Login from '../pages/Login/Login';
+import ProfileStack from './ProfileStack';
 
 const Drawer = createDrawerNavigator();
 // const Stack = createStackNavigator();
@@ -55,6 +56,7 @@ class Router extends Component {
         drawerContent={(props) => <LoggedDrawerContent {...props} />}
       >
         <Drawer.Screen name="Home" component={Home} />
+        <Drawer.Screen name="Profile" component={ProfileStack} />
       </Drawer.Navigator>
     );
   };

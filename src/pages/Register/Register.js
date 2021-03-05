@@ -9,17 +9,15 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import database from '@react-native-firebase/database';
-import auth from '@react-native-firebase/auth';
 import ImagePicker from 'react-native-image-crop-picker';
-import storage from '@react-native-firebase/storage';
 
 import styles from './style';
 import LayoutDrawer from '../../components/LayoutDrawer/LayoutDrawer';
 import Container from '../../components/Container/Container';
+import apiRegister from '../../API/apiRegister';
 
 const Register = (props) => {
-  const { navigation, route } = props;
+  const { navigation } = props;
 
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
@@ -68,49 +66,17 @@ const Register = (props) => {
       return false;
     }
 
-    setLoading(true);
-    database()
-      .ref(`/username/${username.trim()}`)
-      .once('value')
-      .then((snapshot) => {
-        if (!snapshot.val()) {
-          auth()
-            .createUserWithEmailAndPassword(email.trim(), password.trim())
-            .then(async () => {
-              const uid = auth().currentUser.uid;
-              // const user = auth().currentUser;
-              const storageRef = storage().refFromURL(`gs://meaug1.appspot.com/${uid}.jpeg`);
-              await storageRef.putFile(img);
-              const photoURL = await storageRef.getDownloadURL();
-              database().ref(`/username/${username.trim()}`).set(email.trim());
-              database().ref(`/user/${uid}/data`).set({
-                name,
-                email: email.trim(),
-                username: username.trim(),
-                age,
-                uf,
-                phone,
-                city,
-                photoURL,
-              });
-              // user.updateProfile({
-              //   displayName: name,
-              //   photoURL,
-              // });
-            })
-            .catch((error) => {
-              Alert.alert(error.message);
-              setLoading(false);
-            });
-        } else {
-          Alert.alert('Usuário já exite');
-          setLoading(false);
-        }
-      })
-      .catch((error) => {
-        Alert.alert(error.message);
-        setLoading(false);
-      });
+    const userDate = {
+      name,
+      email: email.trim(),
+      username: username.trim(),
+      age,
+      uf,
+      phone,
+      city,
+    };
+
+    apiRegister(username, password, userDate, img, setLoading);
 
     return true;
   };
@@ -128,7 +94,7 @@ const Register = (props) => {
   };
 
   return (
-    <LayoutDrawer navigation={navigation} route={route}>
+    <LayoutDrawer navigation={navigation} name="Cadastrar">
       <ScrollView>
         <Container>
           <View style={{ paddingBottom: 20 }}>

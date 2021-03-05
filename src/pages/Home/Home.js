@@ -6,10 +6,10 @@ import LayoutDrawer from '../../components/LayoutDrawer/LayoutDrawer';
 import Container from '../../components/Container/Container';
 
 const Home = (props) => {
-  const { navigation, route } = props;
+  const { navigation } = props;
 
   return (
-    <LayoutDrawer navigation={navigation} route={route}>
+    <LayoutDrawer navigation={navigation} name="Home">
       <Container>
         <Text style={styles.text}>Home pos login</Text>
       </Container>
