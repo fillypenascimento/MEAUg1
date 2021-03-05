@@ -1,7 +1,8 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Home from '../pages/Home/Home';
+import Profile from '../pages/Profile/Profile';
+import EditProfile from '../pages/EditProfile/EditProfile';
 
 const Stack = createStackNavigator();
 
@@ -12,8 +13,8 @@ const ProfileStack = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="Profile" component={Home} />
-      <Stack.Screen name="Edit" component={Home} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
   );
 };
