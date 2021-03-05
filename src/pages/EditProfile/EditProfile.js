@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   TextInput,
@@ -12,71 +12,49 @@ import {
 import ImagePicker from 'react-native-image-crop-picker';
 
 import styles from './style';
-import LayoutDrawer from '../../components/LayoutDrawer/LayoutDrawer';
+import LayoutStack from '../../components/LayoutStack/LayoutStack';
 import Container from '../../components/Container/Container';
-import apiRegister from '../../API/apiRegister';
+import apiEditProfile from '../../API/apiEditProfile';
 
-const Register = (props) => {
+import getCurrentUserOnce from '../../API/getCurrentUserOnce';
+
+const EditProfile = (props) => {
   const { navigation } = props;
 
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
-  const [email, setEmail] = useState('');
   const [uf, setUf] = useState('');
   const [city, setCity] = useState('');
   const [phone, setPhone] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmatio, setPasswordConfirmation] = useState('');
   const [img, setImg] = useState(null);
+  const [photoURL, setPhotoURL] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const registerForm = () => {
+  useEffect(() => {
+    getCurrentUserOnce((user) => {
+      setName(user.name);
+      setAge(user.age);
+      setUf(user.uf);
+      setCity(user.city);
+      setPhone(user.phone);
+      setPhotoURL(user.photoURL);
+    });
+  }, []);
+
+  const save = () => {
     if (loading) {
-      return false;
-    }
-
-    if (password.trim() !== passwordConfirmatio.trim()) {
-      Alert.alert('A senha e a confirmação devem ser iguais');
-      return false;
-    }
-
-    if (password.trim().length < 6) {
-      Alert.alert('A deve ter no minimo 6 caracteres');
-      return false;
-    }
-
-    if (username.trim().includes(' ')) {
-      Alert.alert('O username não pode ter espaço');
-      return false;
-    }
-
-    if (username.trim().length < 4) {
-      Alert.alert('O username não pode ser  menor que 4');
-      return false;
-    }
-
-    if (email.trim().length < 0) {
-      Alert.alert('Informe o email');
-      return false;
-    }
-
-    if (!img) {
-      Alert.alert('Carregue uma imagem');
       return false;
     }
 
     const userDate = {
       name,
-      email: email.trim(),
-      username: username.trim(),
       age,
       uf,
       phone,
       city,
     };
 
-    apiRegister(username, password, userDate, img, setLoading);
+    apiEditProfile(userDate, img, setLoading, navigation);
 
     return true;
   };
@@ -94,7 +72,7 @@ const Register = (props) => {
   };
 
   return (
-    <LayoutDrawer navigation={navigation} name="Cadastrar">
+    <LayoutStack navigation={navigation} name="Editar Perfil">
       <ScrollView>
         <Container>
           <View style={{ paddingBottom: 20 }}>
@@ -110,13 +88,6 @@ const Register = (props) => {
               value={age}
               onChangeText={(text) => setAge(text)}
               placeholder="Idade"
-              style={{ marginVertical: 10 }}
-              autoCapitalize="none"
-            />
-            <TextInput
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-              placeholder="Email"
               style={{ marginVertical: 10 }}
               autoCapitalize="none"
             />
@@ -139,29 +110,6 @@ const Register = (props) => {
               style={{ marginVertical: 10 }}
               autoCapitalize="none"
             />
-            <TextInput
-              value={username}
-              onChangeText={(text) => setUsername(text)}
-              placeholder="Usuário"
-              style={{ marginVertical: 10 }}
-              autoCapitalize="none"
-            />
-            <TextInput
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              placeholder="Senha"
-              style={{ marginVertical: 10 }}
-              autoCapitalize="none"
-              secureTextEntry
-            />
-            <TextInput
-              value={passwordConfirmatio}
-              onChangeText={(text) => setPasswordConfirmation(text)}
-              placeholder="Confirmação de Senha"
-              style={{ marginVertical: 10 }}
-              autoCapitalize="none"
-              secureTextEntry
-            />
             <TouchableHighlight
               style={{ marginBottom: 17, borderRadius: 50 }}
               onPress={takeImage}
@@ -170,14 +118,17 @@ const Register = (props) => {
             >
               <Text>Carregar foto</Text>
             </TouchableHighlight>
+            {photoURL && !img && (
+              <Image source={{ uri: photoURL }} style={{ width: 100, height: 100 }} />
+            )}
             {img && <Image source={{ uri: img }} style={{ width: 100, height: 100 }} />}
-            <Button title="Registra" onPress={registerForm} />
+            <Button title="Salvar" onPress={save} />
             {loading && <Text>Carregando...</Text>}
           </View>
         </Container>
       </ScrollView>
-    </LayoutDrawer>
+    </LayoutStack>
   );
 };
 
-export default Register;
+export default EditProfile;

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Text, Button, TextInput, Alert } from 'react-native';
-import database from '@react-native-firebase/database';
-import auth from '@react-native-firebase/auth';
 
 import styles from './style';
 import LayoutDrawer from '../../components/LayoutDrawer/LayoutDrawer';
 import Container from '../../components/Container/Container';
+import apiLogin from '../../API/apiLogin';
 
 const Login = (props) => {
-  const { navigation, route } = props;
+  const { navigation } = props;
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -34,35 +33,13 @@ const Login = (props) => {
       return false;
     }
 
-    setLoading(true);
-    database()
-      .ref(`/username/${username.trim()}`)
-      .once('value')
-      .then((snapshot) => {
-        if (snapshot.val()) {
-          const email = snapshot.val();
-          auth()
-            .signInWithEmailAndPassword(email, password)
-            .then(() => {})
-            .catch((error) => {
-              Alert.alert(error.message);
-              setLoading(false);
-            });
-        } else {
-          Alert.alert('Usuário Não exite');
-          setLoading(false);
-        }
-      })
-      .catch((error) => {
-        Alert.alert(error.message);
-        setLoading(false);
-      });
+    apiLogin(username, password, setLoading);
 
     return true;
   };
 
   return (
-    <LayoutDrawer navigation={navigation} route={route}>
+    <LayoutDrawer navigation={navigation} name="Login">
       <Container>
         <Text style={styles.text}>Login</Text>
         <TextInput

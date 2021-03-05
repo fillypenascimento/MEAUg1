@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 
-import Router from './src/Router';
+import Router from './src/Router/Router';
 
 const App = () => {
   return (

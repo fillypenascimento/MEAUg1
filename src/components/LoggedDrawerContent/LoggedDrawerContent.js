@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Text, Image } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
+
+import getCurrentUserOn from '../../API/getCurrentUserOn';
 
 const LoggedDrawerContent = (props) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const uid = auth().currentUser.uid;
-    database()
-      .ref(`/user/${uid}/data`)
-      .on('value', (snapshot) => {
-        if (snapshot.val()) {
-          setUser(snapshot.val());
-        }
-      });
+    const unsubscribe = getCurrentUserOn(setUser);
 
-    return () => database().ref(`/user/${uid}/data`).off();
+    return unsubscribe;
   }, []);
 
   return (

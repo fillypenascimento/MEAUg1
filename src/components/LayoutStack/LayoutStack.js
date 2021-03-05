@@ -1,20 +1,22 @@
 import React from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
+import { StackActions } from '@react-navigation/native';
 
 import styles from './style';
 
-const LayoutDrawer = (props) => {
+const LayoutStack = (props) => {
   const { children, navigation, name } = props;
+  const popAction = StackActions.pop(1);
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.line}>
         <TouchableHighlight
           style={styles.text}
-          onPress={() => navigation.toggleDrawer()}
+          onPress={() => navigation.dispatch(popAction)}
           activeOpacity={0.9}
           underlayColor="rgba(255, 255, 255, 0.2)"
         >
-          <Text>Menu</Text>
+          <Text>Voltar</Text>
         </TouchableHighlight>
         <Text style={styles.routeName}>Rota: {name}</Text>
       </View>
@@ -23,4 +25,4 @@ const LayoutDrawer = (props) => {
   );
 };
 
-export default LayoutDrawer;
+export default LayoutStack;
