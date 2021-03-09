@@ -41,23 +41,31 @@ const Login = (props) => {
   return (
     <LayoutDrawer navigation={navigation} name="Login">
       <Container>
-        <Text style={styles.text}>Login</Text>
+        {/* <Text style={styles.text}>Login</Text> */}
         <TextInput
           value={username}
           onChangeText={(text) => setUsername(text)}
-          placeholder="Usuário"
-          style={{ marginVertical: 10 }}
+          placeholder="Nome de suário"
+          placeholderTextColor={styles.placeholderTextColor.color}
+          selectionColor={styles.selectionColor.color}
+          underlineColorAndroid={styles.underlineColor.color}
+          // style={{ marginVertical: 10 }}
+          style={styles.input1}
           autoCapitalize="none"
         />
         <TextInput
           value={password}
           onChangeText={(text) => setPassword(text)}
           placeholder="Senha"
-          style={{ marginVertical: 10 }}
+          placeholderTextColor={styles.placeholderTextColor.color}
+          selectionColor={styles.selectionColor.color}
+          underlineColorAndroid={styles.underlineColor.color}
+          // style={{ marginVertical: 10 }}
+          style={styles.input2}
           autoCapitalize="none"
           secureTextEntry
         />
-        <Button title="Login" onPress={LoginForm} />
+        <Button title="Entrar" onPress={LoginForm} color={styles.button.backgroundColor}/>
         {loading && <Text>Carregando...</Text>}
       </Container>
     </LayoutDrawer>
