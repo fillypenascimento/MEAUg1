@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import {
   Text,
   TextInput,
-  Button,
   Alert,
+  TouchableOpacity,
   TouchableHighlight,
   Image,
   ScrollView,
@@ -15,6 +15,7 @@ import styles from './style';
 import LayoutDrawer from '../../components/LayoutDrawer/LayoutDrawer';
 import Container from '../../components/Container/Container';
 import apiRegister from '../../API/apiRegister';
+import colors from '../../BaseStyle/colors';
 
 const Register = (props) => {
   const { navigation } = props;
@@ -103,9 +104,11 @@ const Register = (props) => {
             </Text>
           </View>
         </Container>
+
         <Container>
-          <View style={{ paddingBottom: 20 }}>
+          <View>
             <Text style={styles.textTitle}>INFORMAÇÕES PESSOAIS</Text>
+            <View style={styles.line}>
             <TextInput
               value={name}
               onChangeText={(text) => setName(text)}
@@ -113,6 +116,8 @@ const Register = (props) => {
               style={{ marginVertical: 10 }}
               autoCapitalize="words"
             />
+            </View>
+            <View style={styles.line}>
             <TextInput
               value={age}
               onChangeText={(text) => setAge(text)}
@@ -120,6 +125,8 @@ const Register = (props) => {
               style={{ marginVertical: 10 }}
               autoCapitalize="none"
             />
+            </View>
+            <View style={styles.line}>
             <TextInput
               value={email}
               onChangeText={(text) => setEmail(text)}
@@ -127,18 +134,24 @@ const Register = (props) => {
               style={{ marginVertical: 10 }}
               autoCapitalize="none"
             />
+            </View>
+            <View style={styles.line}>
             <TextInput
               value={uf}
               onChangeText={(text) => setUf(text)}
               placeholder="Estado"
               style={{ marginVertical: 10 }}
             />
+            </View>
+            <View style={styles.line}>
             <TextInput
               value={city}
               onChangeText={(text) => setCity(text)}
               placeholder="Cidade"
               style={{ marginVertical: 10 }}
             />
+            </View>
+            <View style={styles.line}>
             <TextInput
               value={phone}
               onChangeText={(text) => setPhone(text)}
@@ -146,6 +159,14 @@ const Register = (props) => {
               style={{ marginVertical: 10 }}
               autoCapitalize="none"
             />
+            </View>
+            </View>
+            <View>
+
+            <Text style={styles.textTitle}>INFORMAÇÕES DE PERFIL</Text>
+            <View style={styles.line}>
+
+              
             <TextInput
               value={username}
               onChangeText={(text) => setUsername(text)}
@@ -153,6 +174,8 @@ const Register = (props) => {
               style={{ marginVertical: 10 }}
               autoCapitalize="none"
             />
+            </View>
+            <View style={styles.line}>
             <TextInput
               value={password}
               onChangeText={(text) => setPassword(text)}
@@ -161,6 +184,8 @@ const Register = (props) => {
               autoCapitalize="none"
               secureTextEntry
             />
+            </View>
+            <View style={styles.line}>
             <TextInput
               value={passwordConfirmatio}
               onChangeText={(text) => setPasswordConfirmation(text)}
@@ -169,18 +194,40 @@ const Register = (props) => {
               autoCapitalize="none"
               secureTextEntry
             />
-            <TouchableHighlight
+            </View>
+            </View>
+
+            <View>
+            <Text style={styles.textTitle}>FOTO DE PERFIL</Text>
+            </View>
+
+            <View style={styles.buttonStylePicture}>
+            <TouchableOpacity
               style={{ marginBottom: 17, borderRadius: 50 }}
               onPress={takeImage}
               activeOpacity={0.9}
               underlayColor="rgba(255, 255, 255, 0.2)"
+              hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
             >
-              <Text>Carregar foto</Text>
-            </TouchableHighlight>
+              
+            </TouchableOpacity>
+            </View>
+
+            <View style={styles.buttonStyleRegister}>
+            <TouchableOpacity 
+              style={{marginBottom: 17, borderRadius: 50}}
+              onPress={registerForm}
+              activeOpacity={0.9}
+              underlayColor="rgba(255, 255, 255, 0.2)"
+              hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
+              >
+                <Text style={styles.buttonStyleRegisterText}>FAZER CADASTRO</Text>
+              </TouchableOpacity>
+            </View>
             {img && <Image source={{ uri: img }} style={{ width: 100, height: 100 }} />}
-            <Button title="Registra" onPress={registerForm} />
+
             {loading && <Text>Carregando...</Text>}
-          </View>
+  
         </Container>
       </ScrollView>
     </LayoutDrawer>

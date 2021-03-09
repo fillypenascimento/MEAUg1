@@ -5,7 +5,8 @@ export default {
     greyBackgroud: '#fafafa',
     greyPictureLayout: '#757575',
     greyPlaceHolder: '#bdbdbd',
-    lightBlueTop: '#88c9bf',
+    lightBlueStatus: '#88c9bf',
     lightBlueBox: '#cfe9e5',
+
     
 };

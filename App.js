@@ -1,12 +1,14 @@
 import React from 'react';
-import { SafeAreaView, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native';
+import colors from './src/BaseStyle/colors';
+import StatusBar from './src/components/StatusBar/StatusBar'
 
 import Router from './src/Router/Router';
 
 const App = () => {
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar backgroundColor={colors.lightBlueStatus}/>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
         <Router />
       </SafeAreaView>
