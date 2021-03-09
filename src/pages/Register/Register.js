@@ -94,11 +94,18 @@ const Register = (props) => {
   };
 
   return (
-    <LayoutDrawer navigation={navigation} name="Cadastrar">
+    <LayoutDrawer navigation={navigation} name="Cadastro Pessoal">
       <ScrollView>
         <Container>
+          <View style={styles.boxAlert}>
+            <Text style={styles.textAlert}>
+              As informações preenchidas serão divulgadas apenas para a pessoa com a qual você realizar o processo de adoção e/ou apadrinhamento, após a formalização do processo.
+            </Text>
+          </View>
+        </Container>
+        <Container>
           <View style={{ paddingBottom: 20 }}>
-            <Text style={styles.text}>Register</Text>
+            <Text style={styles.textTitle}>INFORMAÇÕES PESSOAIS</Text>
             <TextInput
               value={name}
               onChangeText={(text) => setName(text)}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
+import colors from '../../BaseStyle/colors'
 
 import styles from './style';
 
@@ -16,7 +17,7 @@ const LayoutDrawer = (props) => {
         >
           <Text>Menu</Text>
         </TouchableHighlight>
-        <Text style={styles.routeName}>Rota: {name}</Text>
+        <Text style={styles.routeName}>{name}</Text>
       </View>
       <View style={{ flex: 1 }}>{children}</View>
     </View>
