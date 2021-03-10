@@ -38,7 +38,6 @@ export default StyleSheet.create({
   buttonStylePicture:{
     flex: 1,
     alignSelf: 'center',
-    alignItems:'center',
     justifyContent:'center',
     backgroundColor: colors.greyPlaceHolder,
     width:128,

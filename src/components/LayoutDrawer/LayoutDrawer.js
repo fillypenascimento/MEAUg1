@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
+import { View, Text, TouchableHighlight, Image } from 'react-native';
 import colors from '../../BaseStyle/colors'
 
 import styles from './style';
@@ -16,7 +16,7 @@ const LayoutDrawer = (props) => {
           underlayColor="rgba(255, 255, 255, 0.2)"
         >
           
-          <Text>Menu</Text>
+          <Image source={require('../Icons/menu.png')} style={{width: 24, height: 24}}/>
         </TouchableHighlight>
         <Text style={styles.routeName}>{name}</Text>
       </View>

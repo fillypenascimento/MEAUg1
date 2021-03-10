@@ -4,7 +4,6 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
-  TouchableHighlight,
   Image,
   ScrollView,
   View,
@@ -15,7 +14,6 @@ import styles from './style';
 import LayoutDrawer from '../../components/LayoutDrawer/LayoutDrawer';
 import Container from '../../components/Container/Container';
 import apiRegister from '../../API/apiRegister';
-import colors from '../../BaseStyle/colors';
 
 const Register = (props) => {
   const { navigation } = props;
@@ -207,26 +205,25 @@ const Register = (props) => {
               onPress={takeImage}
               activeOpacity={0.9}
               underlayColor="rgba(255, 255, 255, 0.2)"
-              hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
+              hitSlop={{top: 64, bottom: 64, left: 64, right: 64}}
             >
-              
+              {img ? <Image source={{ uri: img }} style={{ width: 128, height: 138 }} /> : <Image source={require('../../components/Icons/camera.png')} style={{width: 48, height: 48, alignSelf: 'center', marginTop: 20}}/>}
             </TouchableOpacity>
             </View>
 
             <View style={styles.buttonStyleRegister}>
             <TouchableOpacity 
-              style={{marginBottom: 17, borderRadius: 50}}
+              style={{marginBottom: 128, borderRadius: 128}}
               onPress={registerForm}
               activeOpacity={0.9}
               underlayColor="rgba(255, 255, 255, 0.2)"
-              hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
               >
                 <Text style={styles.buttonStyleRegisterText}>FAZER CADASTRO</Text>
               </TouchableOpacity>
             </View>
-            {img && <Image source={{ uri: img }} style={{ width: 100, height: 100 }} />}
+           
 
-            {loading && <Text>Carregando...</Text>}
+            {loading && <Text style={{marginBottom: 20, alignSelf: 'center', }}>Carregando...</Text>}
   
         </Container>
       </ScrollView>
