@@ -29,31 +29,32 @@ const PetRegister = (props) => {
   const [petSize, setPetSize] = useState('');
   const [petAge, setPetAge] = useState('');
 
-  const [petTemper, setPetTemper] = useState({});
-  const [petTemperJoker, setPetTemperJoker] = useState(false);
-  const [petTemperShy, setPetTemperShy] = useState(false);
-  const [petTemperCalm, setPetTemperCalm] = useState(false);
-  const [petTemperGuard, setPetTemperGuard] = useState(false);
-  const [petTemperLovely, setPetTemperLovely] = useState(false);
-  const [petTemperLazy, setPetTemperLazy] = useState(false);
+  const [petTemper, setPetTemper] = useState({
+    "calm": false,
+    "guard": false,
+    "joker": false,
+    "lazy": false,
+    "lovely": false,
+    "shy": false,
+  });
 
+  const [petHealth, setPetHealth] = useState({
+    "dewormed": false,
+    "sick": false,
+    "spayed": false,
+    "vaccinated": false,
+  });
 
-  const [petHealth, setPetHealth] = useState({});
-  const [petHealthVaccinated, setPetHealthVaccinated] = useState(false);
-  const [petHealthDewormed, setPetHealthDewormed] = useState(false);
-  const [petHealthSpayed, setPetHealthSpayed] = useState(false);
-  const [petHealthSick, setPetHealthSick] = useState(false);
-
-
-  const [petDocs, setDocs] = useState({});
-  const [petDocsAdoptionTerms, setPetDocsAdoptionTerms] = useState(false);
-  const [petDocsHousePics, setPetDocsHousePics] = useState(false);
-  const [petDocsPreviousVisit, setPetDocsPreviousVisit] = useState(false);
-  const [petDocsVisits, setPetDocsVisits] = useState(false);
-  const [petDocsFollowUp, setPetDocsFollowUp] = useState(false);
-  const [petDocsFollowUp1, setPetDocsFollowUp1] = useState(false);
-  const [petDocsFollowUp3, setPetDocsFollowUp3] = useState(false);
-  const [petDocsFollowUp6, setPetDocsFollowUp6] = useState(false);
+  const [petDocs, setPetDocs] = useState({
+    "adoptionTerms": false,
+    "housePics": false,
+    "previousVisit": false,
+    "visits": false,
+    "followUp": {
+      "value": false,
+      "duration": 0,
+    },
+  });
 
   const [petDocsFinancialHelp, setPetDocsFinancialHelp] = useState(false);
   const [petDocsFinancialHelpFood, setPetDocsFinancialHelpFood] = useState(false);
@@ -79,16 +80,19 @@ const PetRegister = (props) => {
     }
 
     if (petName.trim().includes(' ')) {
+      // ARRUMAR AS MENSAGENS DE ALERTA
       Alert.alert('O username não pode ter espaço');
       return false;
     }
 
     if (petName.trim().length < 4) {
+      // ARRUMAR AS MENSAGENS DE ALERTA
       Alert.alert('O username não pode ser  menor que 4');
       return false;
     }
 
     if (!petImg) {
+      // ARRUMAR AS MENSAGENS DE ALERTA
       Alert.alert('Carregue uma imagem');
       return false;
     }
@@ -96,14 +100,19 @@ const PetRegister = (props) => {
     return true;
   };
 
-  const setTemper = (key, value) => {
+  const temperCheckboxHandler = (key, value) => {
     setPetTemper({...petTemper, [key]: value});
-    console.log(petTemper);
+    // console.log(petTemper);
   };
 
-  const setHealth = (key, value) => {
+  const healthCheckboxHandler = (key, value) => {
     setPetHealth({...petHealth, [key]: value});
-    console.log(petHealth);
+    // console.log(petHealth);
+  };
+
+  const docsCheckboxHandler = (key, value) => {
+    setPetDocs({...petDocs, [key]: value});
+    // console.log(petDocs);
   };
 
   const takeImage = () => {
@@ -130,13 +139,13 @@ const PetRegister = (props) => {
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
             <Button
             title="Adoção"
-            onPress={() => {setTipoCadastro("adocao")}}/>
+            onPress={() => {setTipoCadastro("adoption")}}/>
             <Button
             title="Apadrinhar"
-            onPress={() => {setTipoCadastro("apadrinhar")}}/>
+            onPress={() => {setTipoCadastro("sponsorship")}}/>
             <Button
             title="Ajuda"
-            onPress={() => {setTipoCadastro("ajudar")}}/>
+            onPress={() => {setTipoCadastro("aid")}}/>
           </View>
           </View>
 
@@ -282,32 +291,32 @@ const PetRegister = (props) => {
 
               <CheckBox
                 value={petTemper.joker}
-                onValueChange={() => {setTemper("joker", !petTemper.joker)}}
+                onValueChange={() => {temperCheckboxHandler("joker", !petTemper.joker)}}
               />
               <Text>Brincalhão</Text>
               <CheckBox
                 value={petTemper.shy}
-                onValueChange={() => {setTemper("shy", !petTemper.shy)}}
+                onValueChange={() => {temperCheckboxHandler("shy", !petTemper.shy)}}
               />
               <Text>Tímido</Text>
               <CheckBox
                 value={petTemper.calm}
-                onValueChange={() => {setTemper("calm", !petTemper.calm)}}
+                onValueChange={() => {temperCheckboxHandler("calm", !petTemper.calm)}}
               />
               <Text>Calmo</Text>
               <CheckBox
                 value={petTemper.guard}
-                onValueChange={() => {setTemper("guard", !petTemper.guard)}}
+                onValueChange={() => {temperCheckboxHandler("guard", !petTemper.guard)}}
               />
               <Text>Guarda</Text>
               <CheckBox
                 value={petTemper.lovely}
-                onValueChange={() => {setTemper("lovely", !petTemper.lovely)}}
+                onValueChange={() => {temperCheckboxHandler("lovely", !petTemper.lovely)}}
               />
               <Text>Amoroso</Text>
               <CheckBox
                 value={petTemper.lazy}
-                onValueChange={() => {setTemper("lazy", !petTemper.lazy)}}
+                onValueChange={() => {temperCheckboxHandler("lazy", !petTemper.lazy)}}
               />
               <Text>Preguiçoso</Text>
               </View>
@@ -319,22 +328,22 @@ const PetRegister = (props) => {
 
               <CheckBox
                 value={petHealth.vaccinated}
-                onValueChange={() => {setHealth("vaccinated", !petHealth.vaccinated)}}
+                onValueChange={() => {healthCheckboxHandler("vaccinated", !petHealth.vaccinated)}}
               />
               <Text>Vacinado</Text>
               <CheckBox
                 value={petHealth.dewormed}
-                onValueChange={() => {setHealth("dewormed", !petHealth.dewormed)}}
+                onValueChange={() => {healthCheckboxHandler("dewormed", !petHealth.dewormed)}}
               />
               <Text>Vermifugado</Text>
               <CheckBox
                 value={petHealth.spayed}
-                onValueChange={() => {setHealth("spayed", !petHealth.spayed)}}
+                onValueChange={() => {healthCheckboxHandler("spayed", !petHealth.spayed)}}
               />
               <Text>Castrado</Text>
               <CheckBox
                 value={petHealth.sick}
-                onValueChange={() => {setHealth("sick", !petHealth.sick)}}
+                onValueChange={() => {healthCheckboxHandler("sick", !petHealth.sick)}}
               />
               <Text>Doente</Text>
               </View>
@@ -342,52 +351,66 @@ const PetRegister = (props) => {
             </View>
 
 
-            {(tipoCadastro==="adocao") &&
+            {(tipoCadastro==="adoption") &&
             <View>
               <Text style={styles.textTitle}>EXIGÊNCIAS PARA ADOÇÃO</Text>
               <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
 
               <Text>Termos de Adoção</Text>
               <CheckBox
-                value={petDocsAdoptionTerms}
-                onValueChange={setPetDocsAdoptionTerms}
+                value={petDocs.adoptionTerms}
+                onValueChange={() => {docsCheckboxHandler("adoptionTerms", !petDocs.adoptionTerms)}}
               />
               <Text>Fotos da casa</Text>
               <CheckBox
-                value={petDocsHousePics}
-                onValueChange={setPetDocsHousePics}
+                value={petDocs.housePics}
+                onValueChange={() => {docsCheckboxHandler("housePics", !petDocs.housePics)}}
               />
               <Text>Visita prévia ao animal</Text>
               <CheckBox
-                value={petDocsPreviousVisit}
-                onValueChange={setPetDocsPreviousVisit}
+                value={petDocs.previousVisit}
+                onValueChange={() => {docsCheckboxHandler("previousVisit", !petDocs.previousVisit)}}
               />
               <Text>Acompanhamento pós adoção</Text>
               <CheckBox
-                value={petDocsFollowUp}
-                onValueChange={setPetDocsFollowUp}
+                value={petDocs.followUp.value}
+                onValueChange={() => {
+                  docsCheckboxHandler(
+                    "followUp",
+                    {
+                      "value": !petDocs.followUp.value,
+                      "duration": petDocs.followUp.value ? 0 : petDocs.followUp.duration,
+                    }
+                  )
+                }}
               />
-              <Text>1 Mês</Text>
-              <CheckBox
-                value={petDocsFollowUp1}
-                onValueChange={setPetDocsFollowUp1}
-              />
-              <Text>3 Meses</Text>
-              <CheckBox
-                value={petDocsFollowUp3}
-                onValueChange={setPetDocsFollowUp3}
-              />
-              <Text>6 Meses</Text>
-              <CheckBox
-                value={petDocsFollowUp6}
-                onValueChange={setPetDocsFollowUp6}
-              />
-              
+              {petDocs.followUp.value &&
+                <View>
+                  <Text>1 Mês</Text>
+                  <RadioButton
+                    value="1"
+                    status={ petDocs.followUp.duration === 1 ? 'checked' : 'unchecked' }
+                    onPress={() => {docsCheckboxHandler("followUp", { "value": petDocs.followUp.value, "duration":1 })}}
+                  />
+                  <Text>3 Meses</Text>
+                  <RadioButton
+                    value="3"
+                    status={ petDocs.followUp.duration === 3 ? 'checked' : 'unchecked' }
+                    onPress={() => {docsCheckboxHandler("followUp", { "value": petDocs.followUp.value, "duration":3 })}}
+                  />
+                  <Text>6 Meses</Text>
+                  <RadioButton
+                    value="6"
+                    status={ petDocs.followUp.duration === 6 ? 'checked' : 'unchecked' }
+                    onPress={() => {docsCheckboxHandler("followUp", { "value": petDocs.followUp.value, "duration":6 })}}
+                  />
+                </View>
+              } 
               </View>
             </View>
 }
 
-{(tipoCadastro==="apadrinhar") &&
+{(tipoCadastro==="sponsorship") &&
             <View>
             <Text style={styles.textTitle}>EXIGÊNCIAS PARA APADRINHAMENTO</Text>
             <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
@@ -427,7 +450,7 @@ const PetRegister = (props) => {
 }
 
 
-{(tipoCadastro==="ajudar") &&
+{(tipoCadastro==="aid") &&
   <View>
             <Text style={styles.textTitle}>NECESSIDADES DO ANIMAL</Text>
             <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
