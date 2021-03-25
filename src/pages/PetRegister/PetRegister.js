@@ -29,6 +29,7 @@ const PetRegister = (props) => {
   const [petSize, setPetSize] = useState('');
   const [petAge, setPetAge] = useState('');
 
+  const [petTemper, setPetTemper] = useState({});
   const [petTemperJoker, setPetTemperJoker] = useState(false);
   const [petTemperShy, setPetTemperShy] = useState(false);
   const [petTemperCalm, setPetTemperCalm] = useState(false);
@@ -36,11 +37,15 @@ const PetRegister = (props) => {
   const [petTemperLovely, setPetTemperLovely] = useState(false);
   const [petTemperLazy, setPetTemperLazy] = useState(false);
 
+
+  const [petHealth, setPetHealth] = useState({});
   const [petHealthVaccinated, setPetHealthVaccinated] = useState(false);
   const [petHealthDewormed, setPetHealthDewormed] = useState(false);
   const [petHealthSpayed, setPetHealthSpayed] = useState(false);
   const [petHealthSick, setPetHealthSick] = useState(false);
 
+
+  const [petDocs, setDocs] = useState({});
   const [petDocsAdoptionTerms, setPetDocsAdoptionTerms] = useState(false);
   const [petDocsHousePics, setPetDocsHousePics] = useState(false);
   const [petDocsPreviousVisit, setPetDocsPreviousVisit] = useState(false);
@@ -65,9 +70,8 @@ const PetRegister = (props) => {
 
   const [petAbout, setPetAbout] = useState('');
   const [loading, setLoading] = useState(false);
-  const [adocao, setAdocao] = useState(true);
-  const [apadrinhamento, setApadrinhamento] = useState(false);
-  const [ajudar, setAjudar] = useState(false);
+  const [tipoCadastro, setTipoCadastro] = useState('adocao');
+
 
   const registerForm = () => {
     if (loading) {
@@ -92,21 +96,16 @@ const PetRegister = (props) => {
     return true;
   };
 
-  const trueAdocao = () => {
-       setAdocao(true);
-       setApadrinhamento(false);
-       setAjudar(false);
- }
-  const trueApadrinhamento = () => {
-  setAdocao(false);
-  setApadrinhamento(true);
-  setAjudar(false);
-}
-   const trueAjudar = () => {
-       setAdocao(false);
-       setApadrinhamento(false);
-       setAjudar(true);
- }
+  const setTemper = (key, value) => {
+    setPetTemper({...petTemper, [key]: value});
+    console.log(petTemper);
+  };
+
+  const setHealth = (key, value) => {
+    setPetHealth({...petHealth, [key]: value});
+    console.log(petHealth);
+  };
+
   const takeImage = () => {
     ImagePicker.openPicker({
       mediaType: 'photo',
@@ -131,13 +130,13 @@ const PetRegister = (props) => {
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
             <Button
             title="Adoção"
-            onPress={trueAdocao}/>
+            onPress={() => {setTipoCadastro("adocao")}}/>
             <Button
             title="Apadrinhar"
-            onPress={trueApadrinhamento}/>
+            onPress={() => {setTipoCadastro("apadrinhar")}}/>
             <Button
             title="Ajuda"
-            onPress={trueAjudar}/>
+            onPress={() => {setTipoCadastro("ajudar")}}/>
           </View>
           </View>
 
@@ -282,33 +281,33 @@ const PetRegister = (props) => {
               <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems:'center', justifyContent: 'center',}}>
 
               <CheckBox
-                value={petTemperJoker}
-                onValueChange={setPetTemperJoker}
+                value={petTemper.joker}
+                onValueChange={() => {setTemper("joker", !petTemper.joker)}}
               />
               <Text>Brincalhão</Text>
               <CheckBox
-                value={petTemperShy}
-                onValueChange={setPetTemperShy}
+                value={petTemper.shy}
+                onValueChange={() => {setTemper("shy", !petTemper.shy)}}
               />
               <Text>Tímido</Text>
               <CheckBox
-                value={petTemperCalm}
-                onValueChange={setPetTemperCalm}
+                value={petTemper.calm}
+                onValueChange={() => {setTemper("calm", !petTemper.calm)}}
               />
               <Text>Calmo</Text>
               <CheckBox
-                value={petTemperGuard}
-                onValueChange={setPetTemperGuard}
+                value={petTemper.guard}
+                onValueChange={() => {setTemper("guard", !petTemper.guard)}}
               />
               <Text>Guarda</Text>
               <CheckBox
-                value={petTemperLovely}
-                onValueChange={setPetTemperLovely}
+                value={petTemper.lovely}
+                onValueChange={() => {setTemper("lovely", !petTemper.lovely)}}
               />
               <Text>Amoroso</Text>
               <CheckBox
-                value={petTemperLazy}
-                onValueChange={setPetTemperLazy}
+                value={petTemper.lazy}
+                onValueChange={() => {setTemper("lazy", !petTemper.lazy)}}
               />
               <Text>Preguiçoso</Text>
               </View>
@@ -319,29 +318,31 @@ const PetRegister = (props) => {
               <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
 
               <CheckBox
-                value={petHealthVaccinated}
-                onValueChange={setPetHealthVaccinated}
+                value={petHealth.vaccinated}
+                onValueChange={() => {setHealth("vaccinated", !petHealth.vaccinated)}}
               />
               <Text>Vacinado</Text>
               <CheckBox
-                value={petHealthDewormed}
-                onValueChange={setPetHealthDewormed}
+                value={petHealth.dewormed}
+                onValueChange={() => {setHealth("dewormed", !petHealth.dewormed)}}
               />
               <Text>Vermifugado</Text>
               <CheckBox
-                value={petHealthSpayed}
-                onValueChange={setPetHealthSpayed}
+                value={petHealth.spayed}
+                onValueChange={() => {setHealth("spayed", !petHealth.spayed)}}
               />
               <Text>Castrado</Text>
               <CheckBox
-                value={petHealthSick}
-                onValueChange={setPetHealthSick}
+                value={petHealth.sick}
+                onValueChange={() => {setHealth("sick", !petHealth.sick)}}
               />
               <Text>Doente</Text>
               </View>
 
             </View>
-            {adocao &&
+
+
+            {(tipoCadastro==="adocao") &&
             <View>
               <Text style={styles.textTitle}>EXIGÊNCIAS PARA ADOÇÃO</Text>
               <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
@@ -386,7 +387,7 @@ const PetRegister = (props) => {
             </View>
 }
 
-{apadrinhamento &&
+{(tipoCadastro==="apadrinhar") &&
             <View>
             <Text style={styles.textTitle}>EXIGÊNCIAS PARA APADRINHAMENTO</Text>
             <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
@@ -426,7 +427,7 @@ const PetRegister = (props) => {
 }
 
 
-{ajudar &&
+{(tipoCadastro==="ajudar") &&
   <View>
             <Text style={styles.textTitle}>NECESSIDADES DO ANIMAL</Text>
             <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
