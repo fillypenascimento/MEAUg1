@@ -18,13 +18,17 @@ import ImagePicker from 'react-native-image-crop-picker';
 import styles from './style';
 import LayoutDrawer from '../../components/LayoutDrawer/LayoutDrawer';
 import Container from '../../components/Container/Container';
+import apiRegisterPet from '../../API/apiRegisterPet';
 
 const PetRegister = (props) => {
   const { navigation } = props;
 
+  // TIPO DE CADASTRO: ADOÇÃO, APADRINHAMENTO OU AJUDA
+  const [registerType, setRegisterType] = useState('adoption');
+
   const [petName, setPetName] = useState('');
   const [petImg, setPetImg] = useState(null);
-  const [petType, setPetType] = useState('');
+  const [petSpecies, setPetSpecies] = useState('');
   const [petGender, setPetGender] = useState('');
   const [petSize, setPetSize] = useState('');
   const [petAge, setPetAge] = useState('');
@@ -45,7 +49,8 @@ const PetRegister = (props) => {
     "vaccinated": false,
   });
 
-  const [petDocs, setPetDocs] = useState({
+  // EXIGÊNCIAS ADOÇÃO
+  const [petAdoptionDocs, setPetAdoptionDocs] = useState({
     "adoptionTerms": false,
     "housePics": false,
     "previousVisit": false,
@@ -56,22 +61,36 @@ const PetRegister = (props) => {
     },
   });
 
-  const [petDocsFinancialHelp, setPetDocsFinancialHelp] = useState(false);
-  const [petDocsFinancialHelpFood, setPetDocsFinancialHelpFood] = useState(false);
-  const [petDocsFinancialHelpMeds, setPetDocsFinancialHelpMeds] = useState(false);
-  const [petDocsFinancialHelpObjects, setPetDocsFinancialHelpObjects] = useState(false);  
+  // EXIGÊNCIAS APADRINHAMENTO
+  const [petSponsorshipDocs, setPetSponsorshipDocs] = useState({
+    "sponsorshipTerms": false,
+    "financialAid": {
+      "value": false,
+      "types": {
+        "food": false,
+        "health": false,
+        "objects": false,
+      }
+    },
+    "visits": false,
+  });
     
-
-  const [petNecessitiesFood, setPetNecessitiesFood] = useState(false);
-  const [petNecessitiesFinancialHelp, setPetNecessitiesFinancialHelp] = useState(false);
-  const [petNecessitiesMeds, setPetNecessitiesMeds] = useState(false);
-  const [petNecessitiesMedications, setPetNecessitiesMedications] = useState('');
-  const [petNecessitiesObject, setPetNecessitiesObject] = useState(false);
-  const [petNecessitiesObjects, setPetNecessitiesObjects] = useState('');
+  // NECESSIDADES DO ANIMAL
+  const [petAidDocs, setPetAidDocs] = useState({
+    "food": false,
+    "financialAid": false,
+    "medications": {
+      "value": false,
+      "description": "",
+    },
+    "objects": {
+      "value": false,
+      "description": ""
+    }
+  });
 
   const [petAbout, setPetAbout] = useState('');
   const [loading, setLoading] = useState(false);
-  const [tipoCadastro, setTipoCadastro] = useState('adocao');
 
 
   const registerForm = () => {
@@ -79,23 +98,61 @@ const PetRegister = (props) => {
       return false;
     }
 
-    if (petName.trim().includes(' ')) {
-      // ARRUMAR AS MENSAGENS DE ALERTA
-      Alert.alert('O username não pode ter espaço');
-      return false;
-    }
-
-    if (petName.trim().length < 4) {
-      // ARRUMAR AS MENSAGENS DE ALERTA
-      Alert.alert('O username não pode ser  menor que 4');
+    if (petName.trim().length < 1) {
+      Alert.alert('O nome do pet não pode ser vazio.');
       return false;
     }
 
     if (!petImg) {
-      // ARRUMAR AS MENSAGENS DE ALERTA
-      Alert.alert('Carregue uma imagem');
+      Alert.alert('Carregue uma imagem para o seu pet.');
       return false;
     }
+
+    if (petSpecies === '') {
+      Alert.alert('Selecione a espécie do seu pet.');
+      return false;
+    }
+
+    if (petGender === '') {
+      Alert.alert('Selecione o sexo do seu pet.');
+      return false;
+    }
+
+    if (petSize === '') {
+      Alert.alert('Selecione o tamanho do seu pet.');
+      return false;
+    }
+
+    if (petAge === '') {
+      Alert.alert('Selecione a idade do seu pet.');
+      return false;
+    }
+
+    const petData = {
+      registerType,
+      petName,
+      petSpecies,
+      petGender,
+      petSize,
+      petAge,
+      petTemper,
+      petHealth,
+      petDocs: () => {
+        switch (registerType) {
+          case "adoption":
+            return petAdoptionDocs;
+          case "sponsorship":
+            return petSponsorshipDocs;
+          case "aid":
+            return petAidDocs;
+          default:
+            break;
+        }
+      },
+      petAbout,
+    };
+
+    apiRegisterPet(petData, petImg, setLoading);
 
     return true;
   };
@@ -110,9 +167,19 @@ const PetRegister = (props) => {
     // console.log(petHealth);
   };
 
-  const docsCheckboxHandler = (key, value) => {
-    setPetDocs({...petDocs, [key]: value});
-    // console.log(petDocs);
+  const adoptionDocsCheckboxHandler = (key, value) => {
+    setPetAdoptionDocs({...petAdoptionDocs, [key]: value});
+    console.log(petAdoptionDocs);
+  };
+
+  const sponsorshipDocsCheckboxHandler = (key, value) => {
+    setPetSponsorshipDocs({...petSponsorshipDocs, [key]: value});
+    console.log(petSponsorshipDocs);
+  };
+
+  const aidDocsCheckboxHandler = (key, value) => {
+    setPetAidDocs({...petAidDocs, [key]: value});
+    console.log(petAidDocs);
   };
 
   const takeImage = () => {
@@ -137,49 +204,52 @@ const PetRegister = (props) => {
             Tenho interesse em cadastrar o animal para:  
             </Text>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
-            <Button
-            title="Adoção"
-            onPress={() => {setTipoCadastro("adoption")}}/>
-            <Button
-            title="Apadrinhar"
-            onPress={() => {setTipoCadastro("sponsorship")}}/>
-            <Button
-            title="Ajuda"
-            onPress={() => {setTipoCadastro("aid")}}/>
-          </View>
+              <Button
+                title="Adoção"
+                onPress={() => {setRegisterType("adoption")}}
+              />
+              <Button
+                title="Apadrinhar"
+                onPress={() => {setRegisterType("sponsorship")}}
+              />
+              <Button
+                title="Ajuda"
+                onPress={() => {setRegisterType("aid")}}
+              />
+            </View>
           </View>
 
          
-        <View style={styles.line}></View>
+          <View style={styles.line}></View>
         </Container>
          
         <Container>
           <View>
-            <Text style={{paddingTop: 25}}>Adoção</Text>
-            <Text style={styles.textTitle}>Nome do animal</Text>
-            <TextInput
-              value={petName}
-              onChangeText={(text) => setPetName(text)}
-              placeholder="Nome do animal"
-              style={{ marginVertical: 10 }}
-              autoCapitalize="words"
-            />
+              <Text style={{paddingTop: 25}}>Adoção</Text>
+              <Text style={styles.textTitle}>Nome do animal</Text>
+              <TextInput
+                value={petName}
+                onChangeText={(text) => setPetName(text)}
+                placeholder="Nome do animal"
+                style={{ marginVertical: 10 }}
+                autoCapitalize="words"
+              />
             </View>
            
             <View>
-            <Text style={styles.textTitle}>FOTO DO ANIMAL</Text>
+              <Text style={styles.textTitle}>FOTO DO ANIMAL</Text>
             </View>
 
             <View style={styles.buttonStylePicture}>
-            <TouchableOpacity
-              style={{ marginBottom: 17, borderRadius: 50 }}
-              onPress={takeImage}
-              activeOpacity={0.9}
-              underlayColor="rgba(255, 255, 255, 0.2)"
-              hitSlop={{top: 64, bottom: 64, left: 64, right: 64}}
-            >
-              {petImg ? <Image source={{ uri: petImg }} style={{ width: 128, height: 138 }} /> : <Image source={require('../../components/Icons/camera.png')} style={{width: 48, height: 48, alignSelf: 'center', marginTop: 20}}/>}
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={{ marginBottom: 17, borderRadius: 50 }}
+                onPress={takeImage}
+                activeOpacity={0.9}
+                underlayColor="rgba(255, 255, 255, 0.2)"
+                hitSlop={{top: 64, bottom: 64, left: 64, right: 64}}
+              >
+                {petImg ? <Image source={{ uri: petImg }} style={{ width: 128, height: 138 }} /> : <Image source={require('../../components/Icons/camera.png')} style={{width: 48, height: 48, alignSelf: 'center', marginTop: 20}}/>}
+              </TouchableOpacity>
             </View>
 
 
@@ -188,14 +258,14 @@ const PetRegister = (props) => {
               <View style={{flex: 1, flexDirection: 'row'}}>
               <RadioButton
                 value="Cachorro"
-                status={ petType === 'Cachorro' ? 'checked' : 'unchecked' }
-                onPress={() => setPetType('Cachorro')}
+                status={ petSpecies === 'Cachorro' ? 'checked' : 'unchecked' }
+                onPress={() => setPetSpecies('Cachorro')}
               />
               <Text>Cachorro</Text>
               <RadioButton
                 value="Gato"
-                status={ petType === 'Gato' ? 'checked' : 'unchecked' }
-                onPress={() => setPetType('Gato')}
+                status={ petSpecies === 'Gato' ? 'checked' : 'unchecked' }
+                onPress={() => setPetSpecies('Gato')}
               />
               <Text>Gato</Text>
               </View>
@@ -204,84 +274,84 @@ const PetRegister = (props) => {
             <View>
               <Text style={styles.textTitle}>SEXO</Text>
               <View style={{flex: 1, flexDirection: 'row'}}>
-              <RadioButton
-                value="Macho"
-                status={ petGender === 'Macho' ? 'checked' : 'unchecked' }
-                onPress={() => setPetGender('Macho')}
-              />
-              <Text>Macho</Text>
-              <RadioButton
-                value="Fêmea"
-                status={ petGender === 'Fêmea' ? 'checked' : 'unchecked' }
-                onPress={() => setPetGender('Fêmea')}
-              />
-              <Text>Fêmea</Text>
+                <RadioButton
+                  value="Macho"
+                  status={ petGender === 'Macho' ? 'checked' : 'unchecked' }
+                  onPress={() => setPetGender('Macho')}
+                />
+                <Text>Macho</Text>
+                <RadioButton
+                  value="Fêmea"
+                  status={ petGender === 'Fêmea' ? 'checked' : 'unchecked' }
+                  onPress={() => setPetGender('Fêmea')}
+                />
+                <Text>Fêmea</Text>
               </View>
             </View>
 
             <View>
               <Text style={styles.textTitle}>PORTE</Text>
               <View style={{flex: 1, flexDirection: 'row'}}>
-              <RadioButton
-                value="Pequeno"
-                status={ petSize === 'Pequeno' ? 'checked' : 'unchecked' }
-                onPress={() => setPetSize('Pequeno')}
-              />
-              <Text>Pequeno</Text>
-              <RadioButton
-                value="Médio"
-                status={ petSize === 'Médio' ? 'checked' : 'unchecked' }
-                onPress={() => setPetSize('Médio')}
-              />
-              <Text>Médio</Text>
-              <RadioButton
-                value="Grande"
-                status={ petSize === 'Grande' ? 'checked' : 'unchecked' }
-                onPress={() => setPetSize('Grande')}
-              />
-              <Text>Grande</Text>
+                <RadioButton
+                  value="Pequeno"
+                  status={ petSize === 'Pequeno' ? 'checked' : 'unchecked' }
+                  onPress={() => setPetSize('Pequeno')}
+                />
+                <Text>Pequeno</Text>
+                <RadioButton
+                  value="Médio"
+                  status={ petSize === 'Médio' ? 'checked' : 'unchecked' }
+                  onPress={() => setPetSize('Médio')}
+                />
+                <Text>Médio</Text>
+                <RadioButton
+                  value="Grande"
+                  status={ petSize === 'Grande' ? 'checked' : 'unchecked' }
+                  onPress={() => setPetSize('Grande')}
+                />
+                <Text>Grande</Text>
               </View>
             </View>
 
             <View>
               <Text style={styles.textTitle}>IDADE</Text>
               <View style={{flex: 1, flexDirection: 'row'}}>
-              <RadioButton
-                value="Macho"
-                status={ petGender === 'Macho' ? 'checked' : 'unchecked' }
-                onPress={() => setPetGender('Macho')}
-              />
-              <Text>Macho</Text>
-              <RadioButton
-                value="Fêmea"
-                status={ petGender === 'Fêmea' ? 'checked' : 'unchecked' }
-                onPress={() => setPetGender('Fêmea')}
-              />
-              <Text>Fêmea</Text>
+                <RadioButton
+                  value="Macho"
+                  status={ petGender === 'Macho' ? 'checked' : 'unchecked' }
+                  onPress={() => setPetGender('Macho')}
+                />
+                <Text>Macho</Text>
+                <RadioButton
+                  value="Fêmea"
+                  status={ petGender === 'Fêmea' ? 'checked' : 'unchecked' }
+                  onPress={() => setPetGender('Fêmea')}
+                />
+                <Text>Fêmea</Text>
               </View>
             </View>
 
             <View>
               <Text style={styles.textTitle}>PORTE</Text>
               <View style={{flex: 1, flexDirection: 'row'}}>
-              <RadioButton
-                value="Filhote"
-                status={ petAge === 'Filhote' ? 'checked' : 'unchecked' }
-                onPress={() => setPetAge('Filhote')}
-              />
-              <Text>Filhote</Text>
-              <RadioButton
-                value="Adulto"
-                status={ petAge === 'Adulto' ? 'checked' : 'unchecked' }
-                onPress={() => setPetAge('Adulto')}
-              />
-              <Text>Adulto</Text>
-              <RadioButton
-                value="Idoso"
-                status={ petAge === 'Idoso' ? 'checked' : 'unchecked' }
-                onPress={() => setPetAge('Idoso')}
-              />
-              <Text>Idoso</Text>
+                <RadioButton
+                  value="Filhote"
+                  status={ petAge === 'Filhote' ? 'checked' : 'unchecked' }
+                  onPress={() => setPetAge('Filhote')}
+                />
+                <Text>Filhote</Text>
+                <RadioButton
+                  value="Adulto"
+                  status={ petAge === 'Adulto' ? 'checked' : 'unchecked' }
+                  onPress={() => setPetAge('Adulto')}
+                />
+                <Text>Adulto</Text>
+                <RadioButton
+                  value="Idoso"
+                  status={ petAge === 'Idoso' ? 'checked' : 'unchecked' }
+                  onPress={() => setPetAge('Idoso')}
+                />
+                <Text>Idoso</Text>
               </View>
             </View>
             
@@ -289,36 +359,36 @@ const PetRegister = (props) => {
               <Text style={styles.textTitle}>TEMPERAMENTO</Text>
               <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems:'center', justifyContent: 'center',}}>
 
-              <CheckBox
-                value={petTemper.joker}
-                onValueChange={() => {temperCheckboxHandler("joker", !petTemper.joker)}}
-              />
-              <Text>Brincalhão</Text>
-              <CheckBox
-                value={petTemper.shy}
-                onValueChange={() => {temperCheckboxHandler("shy", !petTemper.shy)}}
-              />
-              <Text>Tímido</Text>
-              <CheckBox
-                value={petTemper.calm}
-                onValueChange={() => {temperCheckboxHandler("calm", !petTemper.calm)}}
-              />
-              <Text>Calmo</Text>
-              <CheckBox
-                value={petTemper.guard}
-                onValueChange={() => {temperCheckboxHandler("guard", !petTemper.guard)}}
-              />
-              <Text>Guarda</Text>
-              <CheckBox
-                value={petTemper.lovely}
-                onValueChange={() => {temperCheckboxHandler("lovely", !petTemper.lovely)}}
-              />
-              <Text>Amoroso</Text>
-              <CheckBox
-                value={petTemper.lazy}
-                onValueChange={() => {temperCheckboxHandler("lazy", !petTemper.lazy)}}
-              />
-              <Text>Preguiçoso</Text>
+                <CheckBox
+                  value={petTemper.joker}
+                  onValueChange={() => {temperCheckboxHandler("joker", !petTemper.joker)}}
+                />
+                <Text>Brincalhão</Text>
+                <CheckBox
+                  value={petTemper.shy}
+                  onValueChange={() => {temperCheckboxHandler("shy", !petTemper.shy)}}
+                />
+                <Text>Tímido</Text>
+                <CheckBox
+                  value={petTemper.calm}
+                  onValueChange={() => {temperCheckboxHandler("calm", !petTemper.calm)}}
+                />
+                <Text>Calmo</Text>
+                <CheckBox
+                  value={petTemper.guard}
+                  onValueChange={() => {temperCheckboxHandler("guard", !petTemper.guard)}}
+                />
+                <Text>Guarda</Text>
+                <CheckBox
+                  value={petTemper.lovely}
+                  onValueChange={() => {temperCheckboxHandler("lovely", !petTemper.lovely)}}
+                />
+                <Text>Amoroso</Text>
+                <CheckBox
+                  value={petTemper.lazy}
+                  onValueChange={() => {temperCheckboxHandler("lazy", !petTemper.lazy)}}
+                />
+                <Text>Preguiçoso</Text>
               </View>
             </View>
 
@@ -326,190 +396,269 @@ const PetRegister = (props) => {
               <Text style={styles.textTitle}>SAÚDE</Text>
               <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
 
-              <CheckBox
-                value={petHealth.vaccinated}
-                onValueChange={() => {healthCheckboxHandler("vaccinated", !petHealth.vaccinated)}}
-              />
-              <Text>Vacinado</Text>
-              <CheckBox
-                value={petHealth.dewormed}
-                onValueChange={() => {healthCheckboxHandler("dewormed", !petHealth.dewormed)}}
-              />
-              <Text>Vermifugado</Text>
-              <CheckBox
-                value={petHealth.spayed}
-                onValueChange={() => {healthCheckboxHandler("spayed", !petHealth.spayed)}}
-              />
-              <Text>Castrado</Text>
-              <CheckBox
-                value={petHealth.sick}
-                onValueChange={() => {healthCheckboxHandler("sick", !petHealth.sick)}}
-              />
-              <Text>Doente</Text>
+                <CheckBox
+                  value={petHealth.vaccinated}
+                  onValueChange={() => {healthCheckboxHandler("vaccinated", !petHealth.vaccinated)}}
+                />
+                <Text>Vacinado</Text>
+                <CheckBox
+                  value={petHealth.dewormed}
+                  onValueChange={() => {healthCheckboxHandler("dewormed", !petHealth.dewormed)}}
+                />
+                <Text>Vermifugado</Text>
+                <CheckBox
+                  value={petHealth.spayed}
+                  onValueChange={() => {healthCheckboxHandler("spayed", !petHealth.spayed)}}
+                />
+                <Text>Castrado</Text>
+                <CheckBox
+                  value={petHealth.sick}
+                  onValueChange={() => {healthCheckboxHandler("sick", !petHealth.sick)}}
+                />
+                <Text>Doente</Text>
               </View>
 
             </View>
 
+            {(registerType==="adoption") &&
+              <View>
+                <Text style={styles.textTitle}>EXIGÊNCIAS PARA ADOÇÃO</Text>
+                <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
 
-            {(tipoCadastro==="adoption") &&
-            <View>
-              <Text style={styles.textTitle}>EXIGÊNCIAS PARA ADOÇÃO</Text>
-              <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
+                  <Text>Termos de Adoção</Text>
+                  <CheckBox
+                    value={petAdoptionDocs.adoptionTerms}
+                    onValueChange={() => {adoptionDocsCheckboxHandler("adoptionTerms", !petAdoptionDocs.adoptionTerms)}}
+                  />
+                  <Text>Fotos da casa</Text>
+                  <CheckBox
+                    value={petAdoptionDocs.housePics}
+                    onValueChange={() => {adoptionDocsCheckboxHandler("housePics", !petAdoptionDocs.housePics)}}
+                  />
+                  <Text>Visita prévia ao animal</Text>
+                  <CheckBox
+                    value={petAdoptionDocs.previousVisit}
+                    onValueChange={() => {adoptionDocsCheckboxHandler("previousVisit", !petAdoptionDocs.previousVisit)}}
+                  />
+                  <Text>Acompanhamento pós adoção</Text>
+                  <CheckBox
+                    value={petAdoptionDocs.followUp.value}
+                    onValueChange={() => {
+                      adoptionDocsCheckboxHandler(
+                        "followUp",
+                        {
+                          "value": !petAdoptionDocs.followUp.value,
+                          "duration": petAdoptionDocs.followUp.value ? 0 : petAdoptionDocs.followUp.duration,
+                        }
+                      )
+                    }}
+                  />
 
-              <Text>Termos de Adoção</Text>
-              <CheckBox
-                value={petDocs.adoptionTerms}
-                onValueChange={() => {docsCheckboxHandler("adoptionTerms", !petDocs.adoptionTerms)}}
-              />
-              <Text>Fotos da casa</Text>
-              <CheckBox
-                value={petDocs.housePics}
-                onValueChange={() => {docsCheckboxHandler("housePics", !petDocs.housePics)}}
-              />
-              <Text>Visita prévia ao animal</Text>
-              <CheckBox
-                value={petDocs.previousVisit}
-                onValueChange={() => {docsCheckboxHandler("previousVisit", !petDocs.previousVisit)}}
-              />
-              <Text>Acompanhamento pós adoção</Text>
-              <CheckBox
-                value={petDocs.followUp.value}
-                onValueChange={() => {
-                  docsCheckboxHandler(
-                    "followUp",
-                    {
-                      "value": !petDocs.followUp.value,
-                      "duration": petDocs.followUp.value ? 0 : petDocs.followUp.duration,
-                    }
-                  )
-                }}
-              />
-              {petDocs.followUp.value &&
-                <View>
-                  <Text>1 Mês</Text>
-                  <RadioButton
-                    value="1"
-                    status={ petDocs.followUp.duration === 1 ? 'checked' : 'unchecked' }
-                    onPress={() => {docsCheckboxHandler("followUp", { "value": petDocs.followUp.value, "duration":1 })}}
+                  {petAdoptionDocs.followUp.value &&
+                    <View>
+                      <Text>1 Mês</Text>
+                      <RadioButton
+                        value="1"
+                        status={ petAdoptionDocs.followUp.duration === 1 ? 'checked' : 'unchecked' }
+                        onPress={() => {adoptionDocsCheckboxHandler("followUp", { "value": petAdoptionDocs.followUp.value, "duration":1 })}}
+                      />
+                      <Text>3 Meses</Text>
+                      <RadioButton
+                        value="3"
+                        status={ petAdoptionDocs.followUp.duration === 3 ? 'checked' : 'unchecked' }
+                        onPress={() => {adoptionDocsCheckboxHandler("followUp", { "value": petAdoptionDocs.followUp.value, "duration":3 })}}
+                      />
+                      <Text>6 Meses</Text>
+                      <RadioButton
+                        value="6"
+                        status={ petAdoptionDocs.followUp.duration === 6 ? 'checked' : 'unchecked' }
+                        onPress={() => {adoptionDocsCheckboxHandler("followUp", { "value": petAdoptionDocs.followUp.value, "duration":6 })}}
+                      />
+                    </View>
+                  } 
+                </View>
+              </View>
+            }
+
+            {(registerType==="sponsorship") &&
+              <View>
+                <Text style={styles.textTitle}>EXIGÊNCIAS PARA APADRINHAMENTO</Text>
+                <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
+
+                  <Text>Termos de Apadrinhamento</Text>
+                  <CheckBox
+                    value={petSponsorshipDocs.sponsorshipTerms}
+                    onValueChange={() => {sponsorshipDocsCheckboxHandler("sponsorshipTerms", !petSponsorshipDocs.sponsorshipTerms)}}
                   />
-                  <Text>3 Meses</Text>
-                  <RadioButton
-                    value="3"
-                    status={ petDocs.followUp.duration === 3 ? 'checked' : 'unchecked' }
-                    onPress={() => {docsCheckboxHandler("followUp", { "value": petDocs.followUp.value, "duration":3 })}}
+                  <Text>Auxílio Financeiro</Text>
+                  <CheckBox
+                    value={petSponsorshipDocs.financialAid.value}
+                    onValueChange={() => {
+                      sponsorshipDocsCheckboxHandler(
+                        "financialAid",
+                        {
+                          "value": !petSponsorshipDocs.financialAid.value,
+                          "types": petSponsorshipDocs.financialAid.value ?
+                            {
+                              "food": false,
+                              "health": false,
+                              "objects": false,
+                            } : 
+                            petSponsorshipDocs.financialAid.types
+                        },
+                      )
+                    }}
                   />
-                  <Text>6 Meses</Text>
-                  <RadioButton
-                    value="6"
-                    status={ petDocs.followUp.duration === 6 ? 'checked' : 'unchecked' }
-                    onPress={() => {docsCheckboxHandler("followUp", { "value": petDocs.followUp.value, "duration":6 })}}
+                  {petSponsorshipDocs.financialAid.value &&
+                    <View>
+                      <Text>Alimentação</Text>
+                      <CheckBox
+                        value={petSponsorshipDocs.financialAid.types.food}
+                        onValueChange={() => {sponsorshipDocsCheckboxHandler(
+                          "financialAid",
+                          {
+                            "value": petSponsorshipDocs.financialAid.value,
+                            "types": {
+                              "food": !petSponsorshipDocs.financialAid.types.food,
+                              "health": petSponsorshipDocs.financialAid.types.health,
+                              "objects": petSponsorshipDocs.financialAid.types.objects,
+                            }
+                          },
+                        )}}
+                      />
+                      <Text>Saúde</Text>
+                      <CheckBox
+                        value={petSponsorshipDocs.financialAid.types.health}
+                        onValueChange={() => {sponsorshipDocsCheckboxHandler(
+                          "financialAid",
+                          {
+                            "value": petSponsorshipDocs.financialAid.value,
+                            "types": {
+                              "food": petSponsorshipDocs.financialAid.types.food,
+                              "health": !petSponsorshipDocs.financialAid.types.health,
+                              "objects": petSponsorshipDocs.financialAid.types.objects,
+                            }
+                          },
+                        )}}
+                      />
+                      <Text>Objetos</Text>
+                      <CheckBox
+                        value={petSponsorshipDocs.financialAid.types.objects}
+                        onValueChange={() => {sponsorshipDocsCheckboxHandler(
+                          "financialAid",
+                          {
+                            "value": petSponsorshipDocs.financialAid.value,
+                            "types": {
+                              "food": petSponsorshipDocs.financialAid.types.food,
+                              "health": petSponsorshipDocs.financialAid.types.health,
+                              "objects": !petSponsorshipDocs.financialAid.types.objects,
+                            }
+                          },
+                        )}}
+                      />
+                    </View>
+                  }
+                  <Text>Visitas ao animal</Text>
+                  <CheckBox
+                    value={petSponsorshipDocs.visits}
+                    onValueChange={() => {sponsorshipDocsCheckboxHandler("visits", !petSponsorshipDocs.visits)}}
                   />
                 </View>
-              } 
               </View>
-            </View>
-}
+            }
 
-{(tipoCadastro==="sponsorship") &&
-            <View>
-            <Text style={styles.textTitle}>EXIGÊNCIAS PARA APADRINHAMENTO</Text>
-            <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
+            {(registerType==="aid") &&
+              <View>
+                <Text style={styles.textTitle}>NECESSIDADES DO ANIMAL</Text>
+                <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
 
-            <Text>Termos de Adoção</Text>
-            <CheckBox
-              value={petDocsAdoptionTerms}
-              onValueChange={setPetDocsAdoptionTerms}
-            />
-            <Text>Auxílio Financeiro</Text>
-            <CheckBox
-              value={petDocsFinancialHelp}
-              onValueChange={setPetDocsFinancialHelp}
-            />
-            <Text>Alimentação</Text>
-            <CheckBox
-              value={petDocsFinancialHelpFood}
-              onValueChange={setPetDocsFinancialHelpFood}
-            />
-            <Text>Saúde</Text>
-            <CheckBox
-              value={petDocsFinancialHelpMeds}
-              onValueChange={setPetDocsFinancialHelpMeds}
-            />
-            <Text>Objetos</Text>
-            <CheckBox
-              value={petDocsFinancialHelpObjects}
-              onValueChange={setPetDocsFinancialHelpObjects}
-            />
-            <Text>Visitas ao animal</Text>
-            <CheckBox
-              value={petDocsVisits}
-              onValueChange={setPetDocsVisits}
-            />
-            </View>
-          </View>
-}
+                  <Text>Alimento</Text>
+                  <CheckBox
+                    value={petAidDocs.food}
+                    onValueChange={() => {aidDocsCheckboxHandler("food", !petAidDocs.food)}}
+                  />
+                  <Text>Auxílio Financeiro</Text>
+                  <CheckBox
+                    value={petAidDocs.financialAid}
+                    onValueChange={() => {aidDocsCheckboxHandler("financialAid", !petAidDocs.financialAid)}}
+                  />
+                  <Text>Medicamento</Text>
+                  <CheckBox
+                    value={petAidDocs.medications.value}
+                    onValueChange={() => {aidDocsCheckboxHandler(
+                      "medications",
+                      {
+                        "value": !petAidDocs.medications.value,
+                        "description": petAidDocs.medications.value ? "" : petAidDocs.medications.description
+                      }
+                    )}}
+                  />
+                  {petAidDocs.medications.value &&
+                    <View>
+                      <TextInput
+                        value={petAidDocs.medications.description}
+                        onChangeText={(text) => aidDocsCheckboxHandler(
+                          "medications",
+                          {
+                            "value": petAidDocs.medications.value,
+                            "description": text
+                          }
+                        )}
+                        placeholder="Nomes dos medicamentos"
+                        style={{ marginVertical: 10 }}
+                        autoCapitalize="words"
+                      />
+                    </View>
+                  }
+                  <Text>Objetos</Text>
+                  <CheckBox
+                    value={petAidDocs.objects.value}
+                    onValueChange={() => {aidDocsCheckboxHandler(
+                      "objects",
+                      {
+                        "value": !petAidDocs.objects.value,
+                        "description": petAidDocs.objects.value ? "" : petAidDocs.objects.description
+                      }
+                    )}}
+                  />
+                  {petAidDocs.objects.value &&
+                    <View>
+                      <TextInput
+                        value={petAidDocs.objects.description}
+                        onChangeText={(text) => aidDocsCheckboxHandler(
+                          "objects",
+                          {
+                            "value": petAidDocs.objects.value,
+                            "description": text
+                          }
+                        )}
+                        placeholder="Especifique o(s) objeto(s)"
+                        style={{ marginVertical: 10 }}
+                        autoCapitalize="words"
+                      />
+                    </View>
+                  }
+                </View>
+              </View>
+            }
 
-
-{(tipoCadastro==="aid") &&
-  <View>
-            <Text style={styles.textTitle}>NECESSIDADES DO ANIMAL</Text>
-            <View style={{flex: 1, flexDirection: 'column', flexWrap: 'wrap', alignItems:'flex-start', justifyContent: 'flex-start',}}>
-
-            <Text>Alimento</Text>
-            <CheckBox
-              value={petNecessitiesFood}
-              onValueChange={setPetNecessitiesFood}
-            />
-            <Text>Auxílio Financeiro</Text>
-            <CheckBox
-              value={petNecessitiesFinancialHelp}
-              onValueChange={setPetNecessitiesFinancialHelp}
-            />
-            <Text>Medicamento</Text>
-            <CheckBox
-              value={petNecessitiesMeds}
-              onValueChange={setPetNecessitiesMeds}
-            />
-              <TextInput
-              value={petNecessitiesMedications}
-              onChangeText={(text) => setPetNecessitiesMedications(text)}
-              placeholder="Nomes dos Medicamentos"
-              style={{ marginVertical: 10 }}
-              autoCapitalize="words"
-            />
-            <Text>Objetos</Text>
-            <CheckBox
-              value={petNecessitiesObject}
-              onValueChange={setPetNecessitiesObject}
-            />
-              <TextInput
-              value={petNecessitiesObjects}
-              onChangeText={(text) => setPetNecessitiesObjects(text)}
-              placeholder="Sobre o animal"
-              style={{ marginVertical: 10 }}
-              autoCapitalize="words"
-            />
-            </View>
-          </View>
-
-}
             <View>
               <Text style={styles.textTitle}>SOBRE O ANIMAL</Text>
               <TextInput
-              value={petAbout}
-              onChangeText={(text) => setPetAbout(text)}
-              placeholder="Sobre o animal"
-              style={{ marginVertical: 10 }}
-              autoCapitalize="words"
-            />
+                value={petAbout}
+                onChangeText={(text) => setPetAbout(text)}
+                placeholder="Sobre o animal"
+                style={{ marginVertical: 10 }}
+                autoCapitalize="words"
+              />
             </View>
 
             <View style={styles.buttonStyleRegister}>
-            <TouchableOpacity 
-              style={{marginBottom: 128, borderRadius: 128}}
-              onPress={registerForm}
-              activeOpacity={0.9}
-              underlayColor="rgba(255, 255, 255, 0.2)"
+              <TouchableOpacity 
+                style={{marginBottom: 128, borderRadius: 128}}
+                onPress={registerForm}
+                activeOpacity={0.9}
+                underlayColor="rgba(255, 255, 255, 0.2)"
               >
                 <Text style={styles.buttonStyleRegisterText}>COLOCAR PARA ADOÇÃO</Text>
               </TouchableOpacity>
