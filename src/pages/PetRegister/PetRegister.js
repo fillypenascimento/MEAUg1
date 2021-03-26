@@ -128,58 +128,51 @@ const PetRegister = (props) => {
       return false;
     }
 
+    let docs = {};
+
+    if(registerType === "adoption") {
+      docs = petAdoptionDocs;
+    } else if(registerType === "sponsorship") {
+      docs = petSponsorshipDocs;
+    } else if(registerType === "aid") {
+      docs = petAidDocs;
+    }
+
     const petData = {
-      registerType,
-      petName,
-      petSpecies,
-      petGender,
-      petSize,
-      petAge,
-      petTemper,
-      petHealth,
-      petDocs: () => {
-        switch (registerType) {
-          case "adoption":
-            return petAdoptionDocs;
-          case "sponsorship":
-            return petSponsorshipDocs;
-          case "aid":
-            return petAidDocs;
-          default:
-            break;
-        }
-      },
-      petAbout,
+      name: petName,
+      species: petSpecies,
+      gender: petGender,
+      size: petSize,
+      age: petAge,
+      temper: petTemper,
+      health: petHealth,
+      [`${registerType}Docs`]: docs,
+      about: petAbout,
     };
 
-    apiRegisterPet(petData, petImg, setLoading);
+    apiRegisterPet(registerType, petData, petImg, setLoading, navigation);
 
     return true;
   };
 
   const temperCheckboxHandler = (key, value) => {
     setPetTemper({...petTemper, [key]: value});
-    // console.log(petTemper);
   };
 
   const healthCheckboxHandler = (key, value) => {
     setPetHealth({...petHealth, [key]: value});
-    // console.log(petHealth);
   };
 
   const adoptionDocsCheckboxHandler = (key, value) => {
     setPetAdoptionDocs({...petAdoptionDocs, [key]: value});
-    console.log(petAdoptionDocs);
   };
 
   const sponsorshipDocsCheckboxHandler = (key, value) => {
     setPetSponsorshipDocs({...petSponsorshipDocs, [key]: value});
-    console.log(petSponsorshipDocs);
   };
 
   const aidDocsCheckboxHandler = (key, value) => {
     setPetAidDocs({...petAidDocs, [key]: value});
-    console.log(petAidDocs);
   };
 
   const takeImage = () => {
@@ -190,7 +183,9 @@ const PetRegister = (props) => {
       height: 400,
       cropping: true,
     }).then((image) => {
-      setImg(image.path);
+      setPetImg(image.path);
+    }).catch((error) => {
+      Alert.alert(error.message);
     });
   };
 
@@ -315,24 +310,6 @@ const PetRegister = (props) => {
 
             <View>
               <Text style={styles.textTitle}>IDADE</Text>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <RadioButton
-                  value="Macho"
-                  status={ petGender === 'Macho' ? 'checked' : 'unchecked' }
-                  onPress={() => setPetGender('Macho')}
-                />
-                <Text>Macho</Text>
-                <RadioButton
-                  value="Fêmea"
-                  status={ petGender === 'Fêmea' ? 'checked' : 'unchecked' }
-                  onPress={() => setPetGender('Fêmea')}
-                />
-                <Text>Fêmea</Text>
-              </View>
-            </View>
-
-            <View>
-              <Text style={styles.textTitle}>PORTE</Text>
               <View style={{flex: 1, flexDirection: 'row'}}>
                 <RadioButton
                   value="Filhote"
