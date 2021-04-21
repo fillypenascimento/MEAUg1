@@ -11,6 +11,7 @@ import Home from '../pages/Home/Home';
 import Register from '../pages/Register/Register';
 import Login from '../pages/Login/Login';
 import ProfileStack from './ProfileStack';
+import AdoptionList from '../pages/AdoptionList/AdoptionList'
 
 const Drawer = createDrawerNavigator();
 // const Stack = createStackNavigator();
@@ -57,6 +58,7 @@ class Router extends Component {
       >
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Profile" component={ProfileStack} />
+        <Drawer.Screen name="Lista de Adoção" component={AdoptionList} />
       </Drawer.Navigator>
     );
   };
