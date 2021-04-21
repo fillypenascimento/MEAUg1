@@ -9,7 +9,7 @@ const AdoptionList = (props) => {
   const { navigation } = props;
 
   return (
-    <LayoutDrawer navigation={navigation} name="Lista de Adoção">
+    <LayoutDrawer navigation={navigation} name="Animais Para Adoção">
       <Container>
       <Text style={styles.text}>Lista de animais XD</Text>
       </Container>
