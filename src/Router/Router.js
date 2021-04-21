@@ -12,6 +12,7 @@ import Register from '../pages/Register/Register';
 import Login from '../pages/Login/Login';
 import ProfileStack from './ProfileStack';
 import AdoptionList from '../pages/AdoptionList/AdoptionList'
+import PetRegister from '../pages/PetRegister/PetRegister';
 
 const Drawer = createDrawerNavigator();
 // const Stack = createStackNavigator();
@@ -59,6 +60,7 @@ class Router extends Component {
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Profile" component={ProfileStack} />
         <Drawer.Screen name="Lista de Adoção" component={AdoptionList} />
+        <Drawer.Screen name="Cadastro Pet" component={PetRegister} />
       </Drawer.Navigator>
     );
   };
