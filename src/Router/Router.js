@@ -13,6 +13,7 @@ import Login from '../pages/Login/Login';
 import ProfileStack from './ProfileStack';
 import PetList from '../pages/PetList/PetList'
 import PetRegister from '../pages/PetRegister/PetRegister';
+import Notifications from '../pages/Notifications/Notifications';
 
 const Drawer = createDrawerNavigator();
 // const Stack = createStackNavigator();
@@ -61,6 +62,8 @@ class Router extends Component {
         <Drawer.Screen name="Profile" component={ProfileStack} />
         <Drawer.Screen name="Lista de Adoção" component={PetList} />
         <Drawer.Screen name="Cadastro Pet" component={PetRegister} />
+        <Drawer.Screen name="Notificações" component={Notifications} />
+        {/* <Drawer.Screen name="Detalhe Pet" component={PetInfo} /> */}
       </Drawer.Navigator>
     );
   };

@@ -13,7 +13,7 @@ const PetList = (props) => {
   return (
     <LayoutDrawer navigation={navigation} name="Animais Para Adoção">
       <Container>
-        <AdoptionList allPets={true} />
+        <AdoptionList navigation={navigation} allPets={true} />
       </Container>
     </LayoutDrawer>
   );
