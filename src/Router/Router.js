@@ -11,7 +11,7 @@ import Home from '../pages/Home/Home';
 import Register from '../pages/Register/Register';
 import Login from '../pages/Login/Login';
 import ProfileStack from './ProfileStack';
-import AdoptionList from '../pages/AdoptionList/AdoptionList'
+import PetList from '../pages/PetList/PetList'
 import PetRegister from '../pages/PetRegister/PetRegister';
 
 const Drawer = createDrawerNavigator();
@@ -59,7 +59,7 @@ class Router extends Component {
       >
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Profile" component={ProfileStack} />
-        <Drawer.Screen name="Lista de Adoção" component={AdoptionList} />
+        <Drawer.Screen name="Lista de Adoção" component={PetList} />
         <Drawer.Screen name="Cadastro Pet" component={PetRegister} />
       </Drawer.Navigator>
     );
