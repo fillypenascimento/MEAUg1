@@ -14,49 +14,28 @@ const AdoptionList = (props) => {
   const [pets, setPets] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  console.log("TO AQUI NESSA JOÇA");
+  useEffect(() => {
+    if(allPets) {
+      getAllPets(setLoading, setPets);
+    } else {
+      getMyPets(setLoading, setPets);
+    }
+  }, []);
 
-
-  // const petsResponse = allPets ? getAllPets(setLoading, setPets) : getMyPets(setLoading, setPets);
-
-  // isso aqui tá causando os re-renders; a ideia era atribuir pro "pets" o resultado da chamada pra API pra recuperar os animais
-  if(allPets) getAllPets(setLoading, setPets); else getMyPets(setLoading, setPets);
-
-  const petsListIds = pets ? Object.keys(pets) : [];
-  console.log(petsListIds);
-
-  const petsListValues = pets ? Object.values(pets): [];
-  console.log(petsListValues);
-  console.log("TO AQUI NESSA PORRAAAAAAAAAA");
-
-  const petsListIdsValues = petsListValues.map((value,i) => {
-    // console.log(value.petId);
-
+  const petsList = pets ? Object.keys(pets).map((petId) => {
     return ({
-      petId: petsListIds[i],
-      petInfo: value,
-    })
-  });
-  
-  console.log(petsListIdsValues);
-
-  // const petsList = petsListIdsValues.map(pet => {
-  //   <PetCard key={pet.petId} pet={petInfo} allPets={allPets}/>
-  // });
+      petId: petId,
+      petInfo: pets[petId]
+    });
+  }) : [];
 
   return (
     <Container>
-      {/* <ScrollView>
-        <View>
-          {petsList}
-        </View>
-      </ScrollView> */}
       <SafeAreaView>
         <FlatList
-          data={petsListIdsValues}
+          data={petsList}
           keyExtractor={pet => pet.petId}
           renderItem={({ item: pet }) => (
-            // <Text style={styles.project}>{ project.title }</Text>
             <PetCard pet={pet.petInfo} allPets={allPets}/>
           )}
         />

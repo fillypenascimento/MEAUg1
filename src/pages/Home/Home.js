@@ -12,9 +12,9 @@ const Home = (props) => {
   return (
     <LayoutDrawer navigation={navigation} name="Home">
       <Container>
-        <Text style={styles.text}>Mostrar nossos animais nessa tela</Text>
+        {/* <Text style={styles.text}>Mostrar nossos animais nessa tela</Text> */}
         <Text style={styles.text}>Adicionar botão de notificação nessa tela</Text>
-        <Text style={styles.text}>Beijar o guileb</Text>
+        {/* <Text style={styles.text}>Beijar o guileb</Text> */}
         <AdoptionList allPets={false} />
       </Container>
     </LayoutDrawer>

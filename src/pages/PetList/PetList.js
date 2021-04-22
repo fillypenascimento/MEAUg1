@@ -10,14 +10,6 @@ import AdoptionList from '../../components/AdoptionList/AdoptionList';
 const PetList = (props) => {
   const { navigation } = props;
 
-  // const [user, setUser] = useState(null);
-
-  // useEffect(() => {
-  //   const unsubscribe = getCurrentUserOn(setUser);
-
-  //   return unsubscribe;
-  // }, []);
-
   return (
     <LayoutDrawer navigation={navigation} name="Animais Para Adoção">
       <Container>
