@@ -8,7 +8,7 @@ import PetCard from '../PetCard/PetCard';
 import { getAllPets, getMyPets } from '../../API/apiPets';
 
 const AdoptionList = (props) => {
-  const { navigation, allPets } = props;
+  const { navigation, allPets, noFilter } = props;
   console.log(allPets);
 
   const [pets, setPets] = useState(null);
@@ -33,10 +33,10 @@ const AdoptionList = (props) => {
     <Container>
       <SafeAreaView>
         <FlatList
-          data={petsList}
+          data={noFilter ? petsList : petsList.filter(pet => pet.petInfo.registerType === "adoption")}
           keyExtractor={pet => pet.petId}
           renderItem={({ item: pet }) => (
-            <PetCard navigation={navigation} pet={pet.petInfo} allPets={allPets}/>
+            <PetCard navigation={navigation} pet={pet.petInfo} allPets={allPets} petId={pet.petId} />
           )}
         />
       </SafeAreaView>

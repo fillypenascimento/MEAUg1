@@ -16,9 +16,17 @@ import Container from '../../components/Container/Container';
 import apiEditProfile from '../../API/apiEditProfile';
 
 import getCurrentUserOnce from '../../API/getCurrentUserOnce';
+import apiGetNotifications from '../../API/apiGetNotifications';
+import { accept, refuse } from '../../API/apiHandleAdoptionRequest';
 
 const Notifications = (props) => {
   const { navigation } = props;
+
+  const [notifications, setNotifications] = useState({});
+
+  useEffect(() => {
+    apiGetNotifications(n => (n && n.data) ? setNotifications(n.data) : setNotifications({}));
+  }, []);
 
   // useEffect(() => {
   //   getCurrentUserOnce((user) => {
@@ -49,8 +57,22 @@ const Notifications = (props) => {
     // return true;
   // };
 
+  console.log("NOTIFICATION", notifications);
+
   return (
-    <></>
+    <>
+      <View>
+        {
+          Object.entries(notifications).map((n) => (
+            <View key={n[0]}>
+              <Text >{ n[1].message }</Text>
+              <Button title="Aceitar" onPress={() => accept(n[0], n[1])}/>
+              <Button title="Recusar" onPress={() => refuse(n[0])}/>
+            </View>
+          ))
+        }
+      </View>
+    </>
     // <LayoutStack navigation={navigation} name="Editar Perfil">
     //   <ScrollView>
     //     <Container>

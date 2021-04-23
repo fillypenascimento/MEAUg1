@@ -21,14 +21,12 @@ export function getAllPets(setLoading, setPets) {
 }
 
 
-
 export function getMyPets(setLoading, setPets) {
   setLoading(true);
 
   database()
     .ref(`/animal`)
-    .once('value')
-    .then(snapshot => {
+    .on('value', (snapshot) => {
       const pets = snapshot.val() === null ? {} : snapshot.val();
       const uid = auth().currentUser.uid;
 
@@ -44,9 +42,9 @@ export function getMyPets(setLoading, setPets) {
 
       setPets(petsObj);
       setLoading(false);
-    })
-    .catch((error) => {
-      Alert.alert(error.message);
-      setLoading(false);
     });
+    // .catch((error) => {
+    //   Alert.alert(error.message);
+    //   setLoading(false);
+    // });
 }

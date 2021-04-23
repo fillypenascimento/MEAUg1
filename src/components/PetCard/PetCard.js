@@ -9,21 +9,13 @@ import Container from '../../components/Container/Container';
 // const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 
 const PetCard = (props) => {
-  const { pet, allPets, navigation } = props;
+  const { pet, petId, allPets, navigation } = props;
 
   return (
     <Container>
       <View>
         <Card
-          onPress={() => {
-            navigation.navigate('PetInfo', {
-              screen: 'PetInfo',
-              params: {
-                pet: pet
-              },
-            });
-          }}
-          // onPress={() => {navigation.navigate('PetInfo')}}
+          onPress={() => { navigation.navigate('PetInfo', { pet: pet, petId: petId }) }}
         >
           {/* <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} /> */}
           <Card.Title title={ pet.data.name }/>

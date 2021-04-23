@@ -11,6 +11,7 @@ import Home from '../pages/Home/Home';
 import Register from '../pages/Register/Register';
 import Login from '../pages/Login/Login';
 import ProfileStack from './ProfileStack';
+import PetStack from './PetStack';
 import PetList from '../pages/PetList/PetList'
 import PetRegister from '../pages/PetRegister/PetRegister';
 import Notifications from '../pages/Notifications/Notifications';
@@ -58,7 +59,7 @@ class Router extends Component {
         initialRouteName="Home"
         drawerContent={(props) => <LoggedDrawerContent {...props} />}
       >
-        <Drawer.Screen name="Home" component={Home} />
+        <Drawer.Screen name="Home" component={PetStack} />
         <Drawer.Screen name="Profile" component={ProfileStack} />
         <Drawer.Screen name="Lista de Adoção" component={PetList} />
         <Drawer.Screen name="Cadastro Pet" component={PetRegister} />
