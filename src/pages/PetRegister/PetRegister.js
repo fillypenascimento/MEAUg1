@@ -11,6 +11,8 @@ import {
   CheckBox,
 } from 'react-native';
 
+// import { CheckBox } from '@react-native-community/checkbox';
+
 import {RadioButton} from 'react-native-paper';
 import ImagePicker from 'react-native-image-crop-picker';
 
@@ -205,10 +207,12 @@ const PetRegister = (props) => {
               />
               <Button
                 title="Apadrinhar"
+                disabled
                 onPress={() => {setRegisterType("sponsorship")}}
               />
               <Button
                 title="Ajuda"
+                disabled
                 onPress={() => {setRegisterType("aid")}}
               />
             </View>

@@ -17,7 +17,7 @@ const ProfileStack = () => {
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       {/* MUDAR!!! ISSO NÃO DEVE FICAR AQUI. */}
-      <Stack.Screen name="PetInfo" component={PetInfo} />
+      {/* <Stack.Screen name="PetInfo" component={PetInfo} /> */}
     </Stack.Navigator>
   );
 };

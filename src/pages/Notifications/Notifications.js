@@ -14,6 +14,7 @@ import styles from './style';
 import LayoutStack from '../../components/LayoutStack/LayoutStack';
 import Container from '../../components/Container/Container';
 import apiEditProfile from '../../API/apiEditProfile';
+import LayoutDrawer from '../../components/LayoutDrawer/LayoutDrawer';
 
 import getCurrentUserOnce from '../../API/getCurrentUserOnce';
 import apiGetNotifications from '../../API/apiGetNotifications';
@@ -60,8 +61,8 @@ const Notifications = (props) => {
   console.log("NOTIFICATION", notifications);
 
   return (
-    <>
-      <View>
+    <LayoutDrawer navigation={navigation} name="Notificações">
+      <Container>
         {
           Object.entries(notifications).map((n) => (
             <View key={n[0]}>
@@ -71,8 +72,8 @@ const Notifications = (props) => {
             </View>
           ))
         }
-      </View>
-    </>
+      </Container>
+    </LayoutDrawer>
     // <LayoutStack navigation={navigation} name="Editar Perfil">
     //   <ScrollView>
     //     <Container>

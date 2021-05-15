@@ -13,24 +13,27 @@ const PetCard = (props) => {
 
   return (
     <Container>
-      <View>
+      {/* <View> */}
         <Card
           onPress={() => { navigation.navigate('PetInfo', { pet: pet, petId: petId }) }}
+          style={styles.cardContainer}
         >
           {/* <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} /> */}
-          <Card.Title title={ pet.data.name }/>
-          <Card.Cover source={{ uri: pet.data.photoURL }} />
+          <Card.Title title={ pet.data.name } titleStyle={styles.cardTitleStyle} style={styles.cardTitle}/>
+          <Card.Cover source={{ uri: pet.data.photoURL }} style={styles.cardCover}/>
           { allPets && (
-            <Card.Content>
+            <Card.Content style={styles.cardContent}>
               {/* <Title>Card title</Title> */}
-              <Paragraph>{ pet.data.gender }</Paragraph>
-              <Paragraph>{ pet.data.age }</Paragraph>
-              <Paragraph>{ pet.data.size }</Paragraph>
-              <Paragraph>BRASÍLIA - DISTRITO FEDERAL</Paragraph>
+              <View style={styles.cardContentInfo}>
+                <Paragraph style={styles.textInfoParagraph}>{ pet.data.gender }</Paragraph>
+                <Paragraph style={styles.textInfoParagraph}>{ pet.data.age }</Paragraph>
+                <Paragraph style={styles.textInfoParagraph}>{ pet.data.size }</Paragraph>
+              </View>
+              <Paragraph style={styles.textInfoParagraph}>BRASÍLIA - DISTRITO FEDERAL</Paragraph>
             </Card.Content>
           )}
         </Card>
-      </View>
+      {/* </View> */}
     </Container>
   );
 };

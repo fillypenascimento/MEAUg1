@@ -12,15 +12,13 @@ const Home = (props) => {
 
   return (
     <LayoutDrawer navigation={navigation} name="Home">
-      <ScrollView>
-        <Container>
-          {/* <Text style={styles.text}>Mostrar nossos animais nessa tela</Text> */}
-          <Text style={styles.text}>Adicionar botão de notificação nessa tela</Text>
-          {/* <Text style={styles.text}>Beijar o guileb</Text> */}
-          <AdoptionList noFilter navigation={navigation} allPets={false} />
-          <Notifications />
-        </Container>
-      </ScrollView>
+      <Container>
+        {/* <Text style={styles.text}>Mostrar nossos animais nessa tela</Text> */}
+        {/* <Text style={styles.text}>Adicionar botão de notificação nessa tela</Text> */}
+        {/* <Text style={styles.text}>Beijar o guileb</Text> */}
+        <AdoptionList noFilter navigation={navigation} allPets={false} />
+      </Container>
+      {/* <Notifications /> */}
     </LayoutDrawer>
   );
 };

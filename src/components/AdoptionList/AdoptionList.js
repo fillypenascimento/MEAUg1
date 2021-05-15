@@ -20,7 +20,7 @@ const AdoptionList = (props) => {
     } else {
       getMyPets(setLoading, setPets);
     }
-  }, []);
+  }, [setPets]);
 
   const petsList = pets ? Object.keys(pets).map((petId) => {
     return ({
@@ -30,7 +30,7 @@ const AdoptionList = (props) => {
   }) : [];
 
   return (
-    <Container>
+    <>
       <SafeAreaView>
         <FlatList
           data={noFilter ? petsList : petsList.filter(pet => pet.petInfo.registerType === "adoption")}
@@ -41,7 +41,7 @@ const AdoptionList = (props) => {
         />
       </SafeAreaView>
       {loading && <Text style={{marginBottom: 20, alignSelf: 'center', }}>Carregando...</Text>}
-    </Container>
+    </>
   );
 };
 
