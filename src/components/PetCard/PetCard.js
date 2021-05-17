@@ -19,15 +19,16 @@ const PetCard = (props) => {
           style={styles.cardContainer}
         >
           {/* <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} /> */}
-          <Card.Title title={ pet.data.name } titleStyle={styles.cardTitleStyle} style={styles.cardTitle}/>
+          {/* <Card.Title title={ pet.data.name } titleStyle={styles.cardTitleStyle} style={styles.cardTitle}/> */}
+          <Text style={styles.cardTitle}>{ pet.data.name }</Text>
           <Card.Cover source={{ uri: pet.data.photoURL }} style={styles.cardCover}/>
           { allPets && (
             <Card.Content style={styles.cardContent}>
               {/* <Title>Card title</Title> */}
               <View style={styles.cardContentInfo}>
-                <Paragraph style={styles.textInfoParagraph}>{ pet.data.gender }</Paragraph>
-                <Paragraph style={styles.textInfoParagraph}>{ pet.data.age }</Paragraph>
-                <Paragraph style={styles.textInfoParagraph}>{ pet.data.size }</Paragraph>
+                <Paragraph style={styles.textInfoParagraph}>{ pet.data.gender.toUpperCase() }</Paragraph>
+                <Paragraph style={styles.textInfoParagraph}>{ pet.data.age.toUpperCase() }</Paragraph>
+                <Paragraph style={styles.textInfoParagraph}>{ pet.data.size.toUpperCase() }</Paragraph>
               </View>
               <Paragraph style={styles.textInfoParagraph}>BRASÍLIA - DISTRITO FEDERAL</Paragraph>
             </Card.Content>

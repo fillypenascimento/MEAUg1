@@ -7,23 +7,22 @@ export default StyleSheet.create({
     marginHorizontal: 8,
     borderRadius: 5,
     overflow: 'hidden',
-    shadowOffset: {
-      width: 0,
-      height: -10
-    },
-    shadowOpacity: 5,
-    shadowRadius: 0.2,
-    elevation: 3,
+    elevation: 4,
   },
   cardTitle: {
     backgroundColor: '#fee29b',
-    // height: 32,
+    color: '#434343',
+    height: 32,
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+    paddingLeft: 10,
+    textAlignVertical: 'center',
   },
   cardTitleStyle: {
-    fontSize: 16,
-    color: '#434343',
-    fontFamily: 'Roboto-Medium',
-    height: 32
+    // fontSize: 16,
+    // color: '#434343',
+    // fontFamily: 'Roboto-Medium',
+    // height: 32
   },
   cardCover: {
     height: 183
